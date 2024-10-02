@@ -24,10 +24,11 @@ func main() {
 
 	for rows.Next() {
 		var id int
-		var name string
-		if err := rows.Scan(&id, &name); err != nil {
+		var email, password, user_name, account_status string
+		var active_matchs interface{}
+		if err := rows.Scan(&id, &email, &password, &user_name, &active_matchs, &account_status); err != nil {
 			panic(err.Error())
 		}
-		fmt.Println(id, name)
+		fmt.Println(id, email, password, user_name, active_matchs, account_status)
 	}
 }
