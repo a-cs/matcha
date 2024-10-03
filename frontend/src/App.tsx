@@ -1,16 +1,12 @@
-import { Box, Button, Container } from "@mui/material"
+import { BrowserRouter } from "react-router-dom"
+import { Router } from "./Router"
 
 function App() {
 
 	return (
-		<Container maxWidth="sm">
-			<Box sx={{ my: 4 }}>
-				<Button variant="contained" ><b>Home</b></Button>
-				<Button variant="contained" color="secondary" ><b>Home</b></Button>
-				<Button variant="contained" color="error" ><b>Home</b></Button>
-				<Button variant="contained" color="success" ><b>Home</b></Button>
-			</Box>
-		</Container>
+		<BrowserRouter>
+			<Router />
+		</BrowserRouter>
 	)
 }
 
