@@ -3,7 +3,6 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
-// import logo from "./logoMatcha.png"
 
 export default function SignUp() {
 	const [showPassword, setShowPassword] = useState(false)
@@ -19,6 +18,7 @@ export default function SignUp() {
 					<Grid2 size={{ xs: 12, sm: 6 }}>
 						<Stack alignItems={"center"} justifyContent={"space-around"} minHeight="100%" >
 							<Box component="img" sx={{ width: "100%", height: "100%", maxWidth: "700px", maxHeight: "700px" }} src="./logoMatcha.png" />
+							<Typography textAlign="center" component="h6" sx={{ typography: { xs: 'h2', md: 'h1' } }} color="primary.main"><b>Matcha</b></Typography>
 						</Stack>
 					</Grid2>
 					<Grid2 size={{ xs: 12, sm: 6 }}>
@@ -58,7 +58,7 @@ export default function SignUp() {
 							</Grid2>
 							<Stack paddingTop={4} spacing={2} direction={"row"} justifyContent={"end"}>
 
-								<Button variant="contained" color="secondary" href="/" ><b>Home</b></Button>
+								<Button variant="contained" color="secondary" href="/" sx={{ borderRadius: '32px' }}><b>Home</b></Button>
 								<Button variant="contained" href="/signup" startIcon={<PersonAddIcon />} sx={{ borderRadius: '32px' }}><b>Sign up</b></Button>
 							</Stack>
 						</Stack>
