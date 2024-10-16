@@ -2,6 +2,7 @@ import { Box, Button, Grid2, IconButton, InputAdornment, Paper, Stack, TextField
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useState } from "react";
 
 export default function SignUp() {
@@ -15,10 +16,12 @@ export default function SignUp() {
 		<Box m={4}>
 			<Paper elevation={8} sx={{ padding: 2, borderRadius: '16px', minHeight: "92vh" }}>
 				<Grid2 container spacing={2}>
-					<Grid2 size={{ xs: 12, sm: 6 }}>
+					<Grid2 size={{ xs: 12, sm: 6 }} sx={{ position: "relative" }}>
+						<IconButton size="large" href="/" sx={{ position: "absolute" }}>
+							<ArrowBackIosNewIcon fontSize="inherit" />
+						</IconButton>
 						<Stack alignItems={"center"} justifyContent={"space-around"} minHeight="100%" >
-							<Box component="img" sx={{ width: "100%", height: "100%", maxWidth: "700px", maxHeight: "700px" }} src="./logoMatcha.png" />
-							<Typography textAlign="center" component="h6" sx={{ typography: { xs: 'h2', md: 'h1' } }} color="primary.main"><b>Matcha</b></Typography>
+							<Box component="img" sx={{ width: "100%", height: "100%", maxWidth: "700px", maxHeight: "700px" }} src="./MatchaLogoWithText.png" />
 						</Stack>
 					</Grid2>
 					<Grid2 size={{ xs: 12, sm: 6 }}>
@@ -37,7 +40,7 @@ export default function SignUp() {
 										input: {
 											endAdornment: (
 												<InputAdornment position="end">
-													<IconButton size="large" onClick={togglePasswordVisibility}>
+													<IconButton tabIndex={-1} size="large" onClick={togglePasswordVisibility}>
 
 														{showPassword ?
 															<VisibilityIcon fontSize="inherit" /> : <VisibilityOffIcon fontSize="inherit" />
@@ -57,8 +60,6 @@ export default function SignUp() {
 								</Grid2>
 							</Grid2>
 							<Stack paddingTop={4} spacing={2} direction={"row"} justifyContent={"end"}>
-
-								<Button variant="contained" color="secondary" href="/" sx={{ borderRadius: '32px' }}><b>Home</b></Button>
 								<Button variant="contained" href="/signup" startIcon={<PersonAddIcon />} sx={{ borderRadius: '32px' }}><b>Sign up</b></Button>
 							</Stack>
 						</Stack>
