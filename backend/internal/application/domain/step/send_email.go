@@ -5,6 +5,7 @@ import (
 	"backend/internal/defines"
 	"errors"
 	"gopkg.in/gomail.v2"
+	"os"
 )
 
 func SendEmailStep(e interface{}) error {
@@ -25,7 +26,7 @@ func sendEmail(intention *entity.CreateUserIntention) error {
 		"text/plain",
 		"Welcome aboard!\n\nClick here to activate your account: http://localhost:8000/confirm/"+intention.SlugID)
 
-	d := gomail.NewDialer("smtp.gmail.com", 587, "rfslonghi@gmail.com", "password")
+	d := gomail.NewDialer("smtp.gmail.com", 587, os.Getenv("SMTP_EMAIL"), os.Getenv("SMTP_EMAIL_PASSWORD"))
 
 	if err := d.DialAndSend(m); err != nil {
 		return err

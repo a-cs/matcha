@@ -15,9 +15,7 @@ func SaveUserOnDatabaseStep(e interface{}) error {
 		return errors.New(defines.CannotSaveUserOnDatabase)
 	}
 
-	// TODO: validate database error
-	_ = saveUserOnDatabase(intention)
-	return nil
+	return saveUserOnDatabase(intention)
 }
 
 func saveUserOnDatabase(intention *entity.CreateUserIntention) error {
@@ -35,7 +33,7 @@ func saveUserOnDatabase(intention *entity.CreateUserIntention) error {
 	defer db.Close()
 
 	query := `INSERT INTO users (email, password, username, active_matches, account_status, slug_id) VALUES ($1, $2, $3, $4, $5, $6)`
-	res, execErr := db.Exec(
+	_, execErr := db.Exec(
 		query,
 		intention.CreateUser.Email,
 		intention.HashedPassword,
@@ -44,7 +42,6 @@ func saveUserOnDatabase(intention *entity.CreateUserIntention) error {
 		defines.PendingStatus,
 		intention.SlugID,
 	)
-	fmt.Printf("res: %v", res)
 	if execErr != nil {
 		return execErr
 	}

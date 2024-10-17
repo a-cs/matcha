@@ -17,9 +17,7 @@ func GetUserByEmailStep(e interface{}) error {
 		return errors.New(defines.CannotGetUserByEmail)
 	}
 
-	// TODO: validate database error
-	_ = getUserByEmail(intention)
-	return nil
+	return getUserByEmail(intention)
 }
 
 func getUserByEmail(intention *entity.CreateUserIntention) error {

@@ -16,9 +16,7 @@ func CreateProfileOnDatabaseStep(e interface{}) error {
 		return errors.New(defines.CannotSaveUserOnDatabase)
 	}
 
-	// TODO: validate database error
-	_ = createProfileOnDatabase(intention)
-	return nil
+	return createProfileOnDatabase(intention)
 }
 
 func createProfileOnDatabase(intention *entity.CreateUserIntention) error {
@@ -35,28 +33,19 @@ func createProfileOnDatabase(intention *entity.CreateUserIntention) error {
 	}
 	defer db.Close()
 
-	query := `INSERT INTO profile (
-                     user_id, 
-                     first_name,
-                     last_name,
-                     likes_counter, 
-                     gender_id, 
-                     tags_list, 
-                     sexual_preference_id,
-                     view_counter, 
-                     is_online,
-                     last_online_at,
-                     account_status,
-                     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
+	query := `INSERT INTO profile (user_id, first_name, last_name, location, likes_counter, gender_id, tags_list, biography, sexual_preference_id, pictures, view_counter, is_online, last_online_at, account_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
 	res, execErr := db.Exec(
 		query,
 		intention.User.ID,
 		intention.CreateUser.FirstName,
 		intention.CreateUser.LastName,
+		defines.EmptyString,
 		0,
-		0,
+		1,
 		defines.EmptyJson,
-		0,
+		defines.EmptyString,
+		1,
+		defines.EmptyJson,
 		0,
 		false,
 		time.Now().Format(time.RFC3339),
