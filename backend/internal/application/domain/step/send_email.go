@@ -19,13 +19,13 @@ func SendEmailStep(e interface{}) error {
 func sendEmail(intention *entity.CreateUserIntention) error {
 	m := gomail.NewMessage()
 	m.SetHeader("From", "noreply@matcha.com")
-	m.SetHeader("To", intention.User.Email)
+	m.SetHeader("To", intention.CreateUser.Email)
 	m.SetHeader("Subject", "Welcome to Matcha!")
 	m.SetBody(
 		"text/plain",
 		"Welcome aboard!\n\nClick here to activate your account: http://localhost:8000/confirm/"+intention.SlugID)
 
-	d := gomail.NewDialer("smtp.gmail.com", 587, "rfslonghi@gmail.com", "usfb gewv hvun sedc")
+	d := gomail.NewDialer("smtp.gmail.com", 587, "rfslonghi@gmail.com", "password")
 
 	if err := d.DialAndSend(m); err != nil {
 		return err

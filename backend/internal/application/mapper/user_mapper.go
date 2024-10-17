@@ -14,3 +14,12 @@ func ToCreateUser(source *dto.CreateUserDto) *entity.CreateUser {
 	automapper.MapLoose(source, &dest)
 	return &dest
 }
+
+func ToUser(source *dto.UserDto) *entity.User {
+	if source == nil {
+		return nil
+	}
+	dest := entity.User{}
+	automapper.MapLoose(source, &dest)
+	return &dest
+}

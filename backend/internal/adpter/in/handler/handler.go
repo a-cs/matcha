@@ -38,7 +38,7 @@ func (h Handler) CreateUser(responseWriter http.ResponseWriter, ctx *http.Reques
 	}
 
 	createUserIntention := entity.CreateUserIntention{
-		User: *mapper.ToCreateUser(createUser),
+		CreateUser: *mapper.ToCreateUser(createUser),
 	}
 
 	err := h.createUserUseCase.Execute(&createUserIntention)

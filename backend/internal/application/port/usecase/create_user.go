@@ -17,6 +17,8 @@ func NewCreateUserUseCase() in.CreateUser {
 			step.HashPasswordStep,
 			step.GenerateSlugIDStep,
 			step.SaveUserOnDatabaseStep,
+			step.GetUserByEmailStep,
+			step.CreateProfileOnDatabaseStep,
 			step.SendEmailStep,
 		},
 	}

@@ -28,24 +28,25 @@ func saveUserOnDatabase(intention *entity.CreateUserIntention) error {
 		os.Getenv("DB_PORT"),
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_SSLMODE"))
-	db, err := sql.Open("postgres", dataSourceName)
-	if err != nil {
-		panic(err.Error())
+	db, connErr := sql.Open("postgres", dataSourceName)
+	if connErr != nil {
+		panic(connErr.Error())
 	}
 	defer db.Close()
 
 	query := `INSERT INTO users (email, password, username, active_matches, account_status, slug_id) VALUES ($1, $2, $3, $4, $5, $6)`
-	_, err = db.Exec(
+	res, execErr := db.Exec(
 		query,
-		intention.User.Email,
+		intention.CreateUser.Email,
 		intention.HashedPassword,
-		intention.User.Username,
+		intention.CreateUser.Username,
 		defines.EmptyJson,
 		defines.PendingStatus,
 		intention.SlugID,
 	)
-	if err != nil {
-		return err
+	fmt.Printf("res: %v", res)
+	if execErr != nil {
+		return execErr
 	}
 
 	return nil

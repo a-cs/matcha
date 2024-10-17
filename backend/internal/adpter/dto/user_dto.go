@@ -10,6 +10,16 @@ type CreateUserDto struct {
 	LastName  string `json:"lastName"`
 }
 
+type UserDto struct {
+	ID            uint64      `json:"id"`
+	Email         string      `json:"email"`
+	Password      string      `json:"password"`
+	Username      string      `json:"username"`
+	ActiveMatches interface{} `json:"active_matches"`
+	AccountStatus string      `json:"account_status"`
+	SlugID        string      `json:"slug_id"`
+}
+
 func (c CreateUserDto) IsValid() bool {
 	return !utils.IsSQLInjection(c.Email, c.Username, c.Password, c.FirstName, c.LastName) &&
 		utils.IsValidEmail(c.Email) &&

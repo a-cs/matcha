@@ -17,7 +17,7 @@ func HashPasswordStep(e interface{}) error {
 }
 
 func hashPassword(intention *entity.CreateUserIntention) error {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(intention.User.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(intention.CreateUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}

@@ -11,6 +11,7 @@ const (
 	CannotGenerateSlugID     = "cannot generate slug id"
 	CannotSaveUserOnDatabase = "cannot save user on database"
 	CannotSendEmail          = "cannot send email"
+	CannotGetUserByEmail     = "cannot get user by email"
 
 	// Regex
 	EmailRegex = `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
