@@ -1,6 +1,7 @@
 package app
 
 import (
+	"backend/internal/adpter/app"
 	"backend/internal/adpter/in/handler"
 	"backend/internal/application/port/in"
 	"backend/internal/application/port/usecase"
@@ -10,6 +11,7 @@ import (
 )
 
 func Start() error {
+	app.Build()
 	handlers := handler.NewHandler(CreateUser())
 
 	mux := initRouter(handlers)
