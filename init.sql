@@ -29,7 +29,8 @@ CREATE TABLE "profile"(
     "pictures" JSON,
     "view_counter" INTEGER NOT NULL,
     "is_online" BOOLEAN NOT NULL,
-    "last_online_at" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
+    "last_online_at" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+    "account_status" VARCHAR(255) NOT NULL
 );
 CREATE TABLE "likes_log"(
     "id" SERIAL PRIMARY KEY,
@@ -43,9 +44,10 @@ CREATE TABLE "users"(
     "id" SERIAL PRIMARY KEY,
     "email" VARCHAR(255) UNIQUE NOT NULL,
     "password" VARCHAR(255) NOT NULL,
-    "user_name" VARCHAR(255) UNIQUE NOT NULL,
+    "username" VARCHAR(255) UNIQUE NOT NULL,
     "active_matches" JSON NOT NULL,
-    "account_status" VARCHAR(255) NOT NULL
+    "account_status" VARCHAR(255) NOT NULL,
+    "slug_id" VARCHAR(255) NOT NULL
 );
 CREATE TABLE "sexual_preference"(
     "id" SERIAL PRIMARY KEY,
