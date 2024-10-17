@@ -8,23 +8,22 @@ import (
 )
 
 type createUser struct {
+	steps []utils.StepFunc
 }
 
 func NewCreateUserUseCase() in.CreateUser {
-	return &createUser{}
-}
-
-func getSteps() []utils.StepFunc {
-	return []utils.StepFunc{
-		step.HashPasswordStep,
-		step.GenerateSlugIDStep,
-		step.SaveUserOnDatabaseStep,
-		step.SendEmailStep,
+	return &createUser{
+		steps: []utils.StepFunc{
+			step.HashPasswordStep,
+			step.GenerateSlugIDStep,
+			step.SaveUserOnDatabaseStep,
+			step.SendEmailStep,
+		},
 	}
 }
 
 func (c *createUser) Execute(intention *entity.CreateUserIntention) error {
-	err := utils.Run(getSteps(), intention)
+	err := utils.Run(c.steps, intention)
 	if err != nil {
 		return err
 	}
