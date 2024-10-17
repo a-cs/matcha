@@ -24,7 +24,7 @@ func sendEmail(intention *entity.CreateUserIntention) error {
 	m.SetHeader("Subject", "Welcome to Matcha!")
 	m.SetBody(
 		"text/plain",
-		"Welcome aboard!\n\nClick here to activate your account: http://localhost:8000/confirm/"+intention.SlugID)
+		"Welcome aboard!\n\nClick here to activate your account: "+os.Getenv("FRONTEND_URL")+"/confirm/"+intention.SlugID)
 
 	d := gomail.NewDialer("smtp.gmail.com", 587, os.Getenv("SMTP_EMAIL"), os.Getenv("SMTP_EMAIL_PASSWORD"))
 
