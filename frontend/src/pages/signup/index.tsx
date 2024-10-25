@@ -5,6 +5,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { FormEvent, useState } from "react";
 import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
 	const [showPassword, setShowPassword] = useState(false)
@@ -16,6 +17,7 @@ export default function SignUp() {
 	const [loading, setLoading] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
 
+	const navigate = useNavigate()
 
 	function togglePasswordVisibility() {
 		setShowPassword(currentState => !currentState)
@@ -28,7 +30,6 @@ export default function SignUp() {
 		if (reason === 'clickaway') {
 			return;
 		}
-
 		setErrorMessage("");
 	};
 
@@ -46,6 +47,7 @@ export default function SignUp() {
 				firstName,
 				lastName
 			})
+			navigate("/")
 			setLoading(false)
 		} catch (error: unknown) {
 			console.log("error:", error)
@@ -82,7 +84,7 @@ export default function SignUp() {
 								<Typography textAlign="center" component="h1" sx={{ typography: { xs: 'h2', md: 'h1' } }} color="primary.main"><b>Sign Up</b></Typography>
 								<Grid2 container spacing={2} >
 									<Grid2 size={{ xs: 12 }}>
-										<TextField fullWidth required label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+										<TextField fullWidth required label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 									</Grid2>
 									<Grid2 size={{ xs: 12, md: 6 }}>
 										<TextField fullWidth required label="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
