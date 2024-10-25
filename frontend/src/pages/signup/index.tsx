@@ -1,4 +1,4 @@
-import { Alert, Box, Button, CircularProgress, Grid2, IconButton, InputAdornment, Paper, Snackbar, SnackbarCloseReason, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid2, IconButton, InputAdornment, Paper, Stack, TextField, Typography } from "@mui/material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -6,8 +6,11 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { FormEvent, useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
+	const navigate = useNavigate()
+
 	const [showPassword, setShowPassword] = useState(false)
 	const [email, setEmail] = useState('')
 	const [username, setUsername] = useState('')
@@ -15,23 +18,10 @@ export default function SignUp() {
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [loading, setLoading] = useState(false)
-	const [errorMessage, setErrorMessage] = useState('')
-
-	const navigate = useNavigate()
 
 	function togglePasswordVisibility() {
 		setShowPassword(currentState => !currentState)
 	}
-
-	function closeToaster(
-		_event?: React.SyntheticEvent | Event,
-		reason?: SnackbarCloseReason,
-	) {
-		if (reason === 'clickaway') {
-			return;
-		}
-		setErrorMessage("");
-	};
 
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault()
@@ -51,23 +41,16 @@ export default function SignUp() {
 			setLoading(false)
 		} catch (error: unknown) {
 			console.log("error:", error)
-			setErrorMessage((error as Error).message)
+			toast((error as Error).message, {
+				type: 'error',
+				draggable: false,
+			})
 			setLoading(false)
 		}
 	}
 
 	return (
 		<>
-			{
-				<Snackbar autoHideDuration={5000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={!!errorMessage} onClose={closeToaster} >
-					<Paper elevation={8}>
-
-						<Alert variant="filled" severity="error" onClose={closeToaster}>
-							{errorMessage}
-						</Alert>
-					</Paper>
-				</Snackbar>
-			}
 			<Box m={4}>
 				<Paper elevation={8} sx={{ padding: 2, borderRadius: '16px', minHeight: "92vh" }}>
 					<Grid2 container spacing={2}>
