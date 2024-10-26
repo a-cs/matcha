@@ -19,7 +19,9 @@ func NewCreateUserUseCase() in.CreateUser {
 			step.SaveUserOnDatabaseStep,
 			step.GetUserByEmailStep,
 			step.CreateProfileOnDatabaseStep,
+			// TODO: step.DeleteUserIfErrorStep,
 			step.SendEmailStep,
+			// TODO: step.DeleteUserIfErrorStep,
 		},
 	}
 }

@@ -33,7 +33,7 @@ func createProfileOnDatabase(intention *entity.CreateUserIntention) error {
 	}
 	defer db.Close()
 
-	query := `INSERT INTO profile (user_id, first_name, last_name, location, likes_counter, gender_id, tags_list, biography, sexual_preference_id, pictures, view_counter, is_online, last_online_at, account_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
+	query := `INSERT INTO profile (user_id, first_name, last_name, location, likes_counter, gender_id, tags_list, biography, sexual_preference_id, pictures, view_counter, is_online, last_online_at, account_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`
 	res, execErr := db.Exec(
 		query,
 		intention.User.ID,

@@ -89,3 +89,5 @@ ALTER TABLE
     "profile" ADD CONSTRAINT "profile_sexual_preference_id_foreign" FOREIGN KEY("sexual_preference_id") REFERENCES "sexual_preference"("id");
 ALTER TABLE
     "profile" ADD CONSTRAINT "profile_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id");
+INSERT INTO sexual_preference (option) VALUES ('not_defined');
+INSERT INTO gender (type) VALUES ('not_defined');

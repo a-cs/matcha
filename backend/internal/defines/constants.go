@@ -12,6 +12,11 @@ const (
 	CannotSaveUserOnDatabase = "cannot save user on database"
 	CannotSendEmail          = "cannot send email"
 	CannotGetUserByEmail     = "cannot get user by email"
+	CannotGetUserBySlugID    = "cannot get user by slug id"
+	CannotGetProfileByUserID = "cannot get profile by user id"
+	CannotUpdateUser         = "cannot update user"
+	CannotUpdateProfile      = "cannot update profile"
+	AccountAlreadyActive     = "account already active"
 
 	// Regex
 	EmailRegex = `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
