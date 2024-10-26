@@ -27,7 +27,9 @@ func IsSQLInjection(inputs ...string) bool {
 
 		// Check for common SQL keywords
 		for _, keyword := range defines.SqlKeywords {
-			if strings.Contains(strings.ToLower(input), keyword) {
+			keywordPattern := `\b` + regexp.QuoteMeta(keyword) + `\b`
+			matched, _ := regexp.MatchString(keywordPattern, strings.ToLower(input))
+			if matched {
 				return true
 			}
 		}

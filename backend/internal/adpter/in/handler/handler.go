@@ -12,14 +12,17 @@ import (
 )
 
 type Handler struct {
-	createUserUseCase in.CreateUser
+	createUserUseCase     in.CreateUser
+	confirmAccountUseCase in.ConfirmAccount
 }
 
 func NewHandler(
 	cu in.CreateUser,
+	ca in.ConfirmAccount,
 ) Handler {
 	return Handler{
-		createUserUseCase: cu,
+		createUserUseCase:     cu,
+		confirmAccountUseCase: ca,
 	}
 }
 
@@ -49,4 +52,32 @@ func (h Handler) CreateUser(responseWriter http.ResponseWriter, ctx *http.Reques
 	}
 
 	responseWriter.WriteHeader(http.StatusCreated)
+}
+
+func (h Handler) ConfirmAccount(responseWriter http.ResponseWriter, ctx *http.Request) {
+	confirmAccount := new(dto.ConfirmAccountDto)
+	if err := json.NewDecoder(ctx.Body).Decode(confirmAccount); err != nil {
+		resp := dto.ResponseDTO{Message: defines.CannotParseJSONRequest}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	if !confirmAccount.IsValid() {
+		resp := dto.ResponseDTO{Message: defines.InvalidRequestBody}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	confirmAccountIntention := entity.ConfirmAccountIntention{
+		SlugID: confirmAccount.SlugID,
+	}
+
+	err := h.confirmAccountUseCase.Execute(&confirmAccountIntention)
+	if err != nil {
+		resp := dto.ResponseDTO{Message: err.Error()}
+		utils.ServiceResponse(responseWriter, resp, http.StatusInternalServerError)
+		return
+	}
+
+	responseWriter.WriteHeader(http.StatusOK)
 }

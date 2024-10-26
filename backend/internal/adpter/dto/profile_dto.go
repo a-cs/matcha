@@ -1,5 +1,7 @@
 package dto
 
+import "backend/internal/utils"
+
 type ProfileDto struct {
 	ID                 uint64      `json:"id,omitempty"`
 	UserID             uint64      `json:"user_id,omitempty"`
@@ -16,4 +18,12 @@ type ProfileDto struct {
 	IsOnline           bool        `json:"is_online,omitempty"`
 	LastOnlineAt       string      `json:"last_online_at,omitempty"`
 	AccountStatus      string      `json:"account_status,omitempty"`
+}
+
+type ConfirmAccountDto struct {
+	SlugID string `json:"slugId"`
+}
+
+func (c ConfirmAccountDto) IsValid() bool {
+	return len(c.SlugID) > 0 && !utils.IsSQLInjection(c.SlugID)
 }

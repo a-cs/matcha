@@ -8,4 +8,5 @@ import (
 
 func Routes(mux *goji.Mux, handlers handler.Handler) {
 	mux.HandleFunc(pat.Post("/signup"), handlers.CreateUser)
+	mux.HandleFunc(pat.Post("/confirm"), handlers.ConfirmAccount)
 }
