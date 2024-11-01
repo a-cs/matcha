@@ -17,6 +17,9 @@ const (
 	CannotUpdateUser         = "cannot update user"
 	CannotUpdateProfile      = "cannot update profile"
 	AccountAlreadyActive     = "account already active"
+	CannotValidateLogin      = "cannot validate login"
+	InvalidPassword          = "invalid password"
+	AccountNotActiveYet      = "account not active yet"
 
 	// Regex
 	EmailRegex = `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`

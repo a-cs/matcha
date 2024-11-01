@@ -14,15 +14,18 @@ import (
 type Handler struct {
 	createUserUseCase     in.CreateUser
 	confirmAccountUseCase in.ConfirmAccount
+	loginUseCase          in.Login
 }
 
 func NewHandler(
 	cu in.CreateUser,
 	ca in.ConfirmAccount,
+	l in.Login,
 ) Handler {
 	return Handler{
 		createUserUseCase:     cu,
 		confirmAccountUseCase: ca,
+		loginUseCase:          l,
 	}
 }
 
@@ -80,4 +83,34 @@ func (h Handler) ConfirmAccount(responseWriter http.ResponseWriter, ctx *http.Re
 	}
 
 	responseWriter.WriteHeader(http.StatusOK)
+}
+
+func (h Handler) Login(responseWriter http.ResponseWriter, ctx *http.Request) {
+	login := new(dto.LoginDto)
+	if err := json.NewDecoder(ctx.Body).Decode(login); err != nil {
+		resp := dto.ResponseDTO{Message: defines.CannotParseJSONRequest}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	if !login.IsValid() {
+		resp := dto.ResponseDTO{Message: defines.InvalidRequestBody}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	loginIntention := entity.LoginIntention{
+		Email:    login.Email,
+		Password: login.Password,
+	}
+
+	err := h.loginUseCase.Execute(&loginIntention)
+	if err != nil {
+		resp := dto.ResponseDTO{Message: err.Error()}
+		utils.ServiceResponse(responseWriter, resp, http.StatusInternalServerError)
+		return
+	}
+
+	resp := mapper.ToJwtResponseDto(&loginIntention.JwtResponse)
+	utils.ServiceResponse(responseWriter, resp, http.StatusOK)
 }
