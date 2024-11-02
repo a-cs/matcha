@@ -10,6 +10,7 @@ import (
 
 func initRouter(handler handler.Handler) *goji.Mux {
 	mux := goji.NewMux()
+	mux.Use(corsMiddleware)
 
 	mapRoutes(mux, handler)
 

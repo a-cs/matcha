@@ -7,6 +7,7 @@ import (
 	"backend/internal/application/port/usecase"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -18,6 +19,22 @@ func Start() error {
 	loggedMux := logRoutes(mux)
 
 	return http.ListenAndServe("localhost:8000", loggedMux)
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", os.Getenv("FRONTEND_URL"))
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Handle preflight requests
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 func CreateUser() in.CreateUser {
