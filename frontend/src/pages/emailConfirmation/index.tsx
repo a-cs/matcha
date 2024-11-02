@@ -2,6 +2,8 @@ import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import api from "../../services/api";
+import { isAxiosError } from "axios";
 
 export default function EmailConfirmation() {
 	const params = useParams()
@@ -10,6 +12,34 @@ export default function EmailConfirmation() {
 	const [message, setMessage] = useState("Reading link information...")
 
 	useEffect(() => {
+		async function confirmEmail(slugId: string) {
+			setMessage("Email confirmation in progress...")
+			try {
+				await api.post('/confirm', {
+					slugId
+				})
+				toast('Account activated!', {
+					type: 'success',
+					draggable: false,
+				})
+				navigate("/login")
+			} catch (error: unknown) {
+				if(isAxiosError(error) && error.response){
+					toast(error.response.data.message, {
+						type: 'error',
+						draggable: false,
+					})
+				}
+				else {
+					toast((error as Error).message, {
+						type: 'error',
+						draggable: false,
+					})
+				}
+				setMessage("Invalid email confirmation link")
+			}
+		}
+
 		if (!params.slugId) {
 			toast('Invalid email confirmation link', {
 				type: 'error',
@@ -18,11 +48,8 @@ export default function EmailConfirmation() {
 			navigate("/")
 		} else {
 			console.log("params.slugId:", params.slugId)
-			setMessage("Email confirmation in progress...")
-			toast('Account activated!', {
-				type: 'success',
-				draggable: false,
-			})
+			confirmEmail(params.slugId)
+
 		}
 	}, [params.slugId, navigate])
 

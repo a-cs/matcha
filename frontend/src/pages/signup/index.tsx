@@ -7,6 +7,7 @@ import { FormEvent, useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { isAxiosError } from "axios";
 
 export default function SignUp() {
 	const navigate = useNavigate()
@@ -41,11 +42,18 @@ export default function SignUp() {
 			navigate("/login")
 			setLoading(false)
 		} catch (error: unknown) {
-			console.log("error:", error)
-			toast((error as Error).message, {
-				type: 'error',
-				draggable: false,
-			})
+			if(isAxiosError(error) && error.response){
+				toast(error.response.data.message, {
+					type: 'error',
+					draggable: false,
+				})
+			}
+			else {
+				toast((error as Error).message, {
+					type: 'error',
+					draggable: false,
+				})
+			}
 			setLoading(false)
 		}
 	}

@@ -8,6 +8,7 @@ import { FormEvent, useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { isAxiosError } from "axios";
 
 export default function Login() {
 	const navigate = useNavigate()
@@ -23,22 +24,27 @@ export default function Login() {
 
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault()
-		console.log("email:", email)
-		console.log("password:", password)
 		setLoading(true)
 		try {
-			await api.post('/lgoin', {
+			await api.post('/login', {
 				email,
 				password,
 			})
 			navigate("/")
 			setLoading(false)
 		} catch (error: unknown) {
-			console.log("error:", error)
-			toast((error as Error).message, {
-				type: 'error',
-				draggable: false,
-			})
+			if(isAxiosError(error) && error.response && error.response.data.message){
+				toast(error.response.data.message, {
+					type: 'error',
+					draggable: false,
+				})
+			}
+			else {
+				toast((error as Error).message, {
+					type: 'error',
+					draggable: false,
+				})
+			}
 			setLoading(false)
 		}
 	}
