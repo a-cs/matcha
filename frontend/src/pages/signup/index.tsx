@@ -25,9 +25,6 @@ export default function SignUp() {
 
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault()
-		console.log("email:", email)
-		console.log("username:", username)
-		console.log("password:", password)
 		setLoading(true)
 		try {
 			await api.post('/signup', {
@@ -37,7 +34,11 @@ export default function SignUp() {
 				firstName,
 				lastName
 			})
-			navigate("/")
+			toast("Account Created. An email link was sent to confirm your account.", {
+				type: 'success',
+				draggable: false,
+			})
+			navigate("/login")
 			setLoading(false)
 		} catch (error: unknown) {
 			console.log("error:", error)
