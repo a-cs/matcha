@@ -12,7 +12,7 @@ import (
 
 func Start() error {
 	app.Build()
-	handlers := handler.NewHandler(CreateUser(), ConfirmAccount())
+	handlers := handler.NewHandler(CreateUser(), ConfirmAccount(), Login())
 
 	mux := initRouter(handlers)
 	loggedMux := logRoutes(mux)
@@ -26,6 +26,10 @@ func CreateUser() in.CreateUser {
 
 func ConfirmAccount() in.ConfirmAccount {
 	return usecase.NewConfirmAccountUseCase()
+}
+
+func Login() in.Login {
+	return usecase.NewLoginUseCase()
 }
 
 func logRoutes(h http.Handler) http.Handler {

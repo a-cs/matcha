@@ -12,15 +12,29 @@ import (
 )
 
 func GetUserByEmailStep(e interface{}) error {
-	intention, ok := e.(*entity.CreateUserIntention)
-	if !ok {
-		return errors.New(defines.CannotGetUserByEmail)
+	createUserIntention, ok := e.(*entity.CreateUserIntention)
+	if ok {
+		user, err := getUserByEmail(createUserIntention.CreateUser.Email)
+		if err != nil {
+			return err
+		}
+		createUserIntention.User = *user
+		return nil
+	}
+	loginIntention, ok := e.(*entity.LoginIntention)
+	if ok {
+		user, err := getUserByEmail(loginIntention.Email)
+		if err != nil {
+			return err
+		}
+		loginIntention.User = *user
+		return nil
 	}
 
-	return getUserByEmail(intention)
+	return errors.New(defines.CannotGetUserByEmail)
 }
 
-func getUserByEmail(intention *entity.CreateUserIntention) error {
+func getUserByEmail(email string) (*entity.User, error) {
 	dataSourceName := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=%s",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -35,14 +49,13 @@ func getUserByEmail(intention *entity.CreateUserIntention) error {
 	defer db.Close()
 
 	query := `SELECT * FROM users WHERE email = $1 LIMIT 1`
-	row := db.QueryRow(query, intention.CreateUser.Email)
+	row := db.QueryRow(query, email)
 
 	var user dto.UserDto
 	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username, &user.ActiveMatches, &user.AccountStatus, &user.SlugID)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	intention.User = *mapper.ToUser(&user)
 
-	return nil
+	return mapper.ToUser(&user), nil
 }
