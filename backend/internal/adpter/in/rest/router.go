@@ -10,4 +10,5 @@ func Routes(mux *goji.Mux, handlers handler.Handler) {
 	mux.HandleFunc(pat.Post("/signup"), handlers.CreateUser)
 	mux.HandleFunc(pat.Post("/confirm"), handlers.ConfirmAccount)
 	mux.HandleFunc(pat.Post("/login"), handlers.Login)
+	mux.HandleFunc(pat.Get("/profile/:username"), handlers.GetProfile)
 }

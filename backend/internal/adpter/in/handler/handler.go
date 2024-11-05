@@ -15,17 +15,20 @@ type Handler struct {
 	createUserUseCase     in.CreateUser
 	confirmAccountUseCase in.ConfirmAccount
 	loginUseCase          in.Login
+	getProfile            in.GetProfile
 }
 
 func NewHandler(
 	cu in.CreateUser,
 	ca in.ConfirmAccount,
 	l in.Login,
+	gp in.GetProfile,
 ) Handler {
 	return Handler{
 		createUserUseCase:     cu,
 		confirmAccountUseCase: ca,
 		loginUseCase:          l,
+		getProfile:            gp,
 	}
 }
 
@@ -112,5 +115,34 @@ func (h Handler) Login(responseWriter http.ResponseWriter, ctx *http.Request) {
 	}
 
 	resp := mapper.ToJwtResponseDto(&loginIntention.JwtResponse)
+	utils.ServiceResponse(responseWriter, resp, http.StatusOK)
+}
+
+func (h Handler) GetProfile(responseWriter http.ResponseWriter, ctx *http.Request) {
+	username := ctx.URL.Path[len("/profile/"):]
+	if len(username) == 0 {
+		resp := dto.ResponseDTO{Message: defines.UsernameMustToBeProvided}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	if utils.IsSQLInjection(username) {
+		resp := dto.ResponseDTO{Message: defines.InvalidRequestBody}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	profileIntention := entity.ProfileIntention{
+		Username: username,
+	}
+
+	err := h.getProfile.Execute(&profileIntention)
+	if err != nil {
+		resp := dto.ResponseDTO{Message: err.Error()}
+		utils.ServiceResponse(responseWriter, resp, http.StatusInternalServerError)
+		return
+	}
+
+	resp := mapper.ToProfileDto(&profileIntention.Profile)
 	utils.ServiceResponse(responseWriter, resp, http.StatusOK)
 }

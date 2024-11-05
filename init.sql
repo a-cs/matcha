@@ -90,4 +90,17 @@ ALTER TABLE
 ALTER TABLE
     "profile" ADD CONSTRAINT "profile_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id");
 INSERT INTO sexual_preference (option) VALUES ('not_defined');
+INSERT INTO sexual_preference (option) VALUES ('Asexual');
+INSERT INTO sexual_preference (option) VALUES ('Bisexual');
+INSERT INTO sexual_preference (option) VALUES ('Gay');
+INSERT INTO sexual_preference (option) VALUES ('Lesbian');
+INSERT INTO sexual_preference (option) VALUES ('Pansexual');
+INSERT INTO sexual_preference (option) VALUES ('Straight');
 INSERT INTO gender (type) VALUES ('not_defined');
+INSERT INTO gender (type) VALUES ('Agender');
+INSERT INTO gender (type) VALUES ('Trans Man');
+INSERT INTO gender (type) VALUES ('Cis Man');
+INSERT INTO gender (type) VALUES ('Trans Woman');
+INSERT INTO gender (type) VALUES ('Cis Woman');
+INSERT INTO gender (type) VALUES ('Travesti');
+INSERT INTO gender (type) VALUES ('Non-Binary');

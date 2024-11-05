@@ -21,6 +21,15 @@ func GetProfileByUserIDStep(e interface{}) error {
 		loginIntention.Profile = *profile
 		return nil
 	}
+	profileIntention, ok := e.(*entity.ProfileIntention)
+	if ok {
+		profile, err := getProfileByUserID(profileIntention.User.ID)
+		if err != nil {
+			return err
+		}
+		profileIntention.Profile = *profile
+		return nil
+	}
 
 	return errors.New(defines.CannotGetProfileByUserID)
 }
