@@ -12,6 +12,7 @@ const (
 	CannotSaveUserOnDatabase = "cannot save user on database"
 	CannotSendEmail          = "cannot send email"
 	CannotGetUserByEmail     = "cannot get user by email"
+	CannotGetUserByUsername  = "cannot get user by username"
 	CannotGetUserBySlugID    = "cannot get user by slug id"
 	CannotGetProfileByUserID = "cannot get profile by user id"
 	CannotUpdateUser         = "cannot update user"
@@ -19,6 +20,7 @@ const (
 	AccountAlreadyActive     = "account already active"
 	CannotValidateLogin      = "cannot validate login"
 	InvalidPassword          = "invalid password"
+	UsernameMustToBeProvided = "username must to be provided"
 	AccountNotActiveYet      = "account not active yet"
 
 	// Regex
