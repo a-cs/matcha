@@ -13,7 +13,7 @@ import (
 func GenerateJWTStep(e interface{}) error {
 	loginIntention, ok := e.(*entity.LoginIntention)
 	if ok {
-		res, err := generateJwt(loginIntention.User.ID, loginIntention.User.Username, loginIntention.Profile.AccountStatus)
+		res, err := generateJwt(loginIntention.User.ID, loginIntention.User.Username, loginIntention.ProfileStatus)
 		if err != nil {
 			return err
 		}
@@ -45,6 +45,6 @@ func createJwtObj(userID uint64, username string) jwt.MapClaims {
 		"user_id":  userID,
 		"username": username,
 		"iat":      time.Now().Unix(),
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		"exp":      time.Now().Add(defines.JwtExpirationTime).Unix(),
 	}
 }

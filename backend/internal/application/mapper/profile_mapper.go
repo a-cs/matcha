@@ -6,65 +6,60 @@ import (
 	"encoding/json"
 )
 
-func ToProfile(profileDto *dto.ProfileDto) *entity.Profile {
-	var tagsList []entity.Tags
-	var pictures []entity.Picture
-
-	if err := json.Unmarshal(profileDto.TagsList, &tagsList); err != nil {
-		tagsList = []entity.Tags{}
-	}
-	if err := json.Unmarshal(profileDto.Pictures, &pictures); err != nil {
-		pictures = []entity.Picture{}
-	}
-
-	return &entity.Profile{
-		ID:                 profileDto.ID,
-		UserID:             profileDto.UserID,
-		FirstName:          profileDto.FirstName,
-		LastName:           profileDto.LastName,
-		Location:           profileDto.Location,
-		LikesCounter:       profileDto.LikesCounter,
-		GenderID:           profileDto.GenderID,
-		TagsList:           tagsList,
-		Biography:          profileDto.Biography,
-		SexualPreferenceID: profileDto.SexualPreferenceID,
-		Pictures:           pictures,
-		ViewCounter:        profileDto.ViewCounter,
-		IsOnline:           profileDto.IsOnline,
-		LastOnlineAt:       profileDto.LastOnlineAt,
-		AccountStatus:      profileDto.AccountStatus,
-	}
-}
-
-func ToProfileDto(profile *entity.Profile) *dto.ProfileDto {
-	if profile == nil {
+func FromProfileDtoToProfile(source *dto.ProfileDto) *entity.Profile {
+	if source == nil {
 		return nil
 	}
 
-	tagsList, err := json.Marshal(profile.TagsList)
-	if err != nil {
-		tagsList = []byte("[]")
-	}
-	pictures, err := json.Marshal(profile.Pictures)
-	if err != nil {
-		pictures = []byte("[]")
+	dest := &entity.Profile{
+		ID:                 source.ID,
+		UserID:             source.UserID,
+		FirstName:          source.FirstName,
+		LastName:           source.LastName,
+		Location:           source.Location,
+		LikesCounter:       source.LikesCounter,
+		GenderID:           source.GenderID,
+		Biography:          source.Biography,
+		SexualPreferenceID: source.SexualPreferenceID,
+		ViewCounter:        source.ViewCounter,
+		IsOnline:           source.IsOnline,
+		LastOnlineAt:       source.LastOnlineAt,
+		AccountStatus:      source.AccountStatus,
 	}
 
-	return &dto.ProfileDto{
-		ID:                 profile.ID,
-		UserID:             profile.UserID,
-		FirstName:          profile.FirstName,
-		LastName:           profile.LastName,
-		Location:           profile.Location,
-		LikesCounter:       profile.LikesCounter,
-		GenderID:           profile.GenderID,
-		TagsList:           tagsList,
-		Biography:          profile.Biography,
-		SexualPreferenceID: profile.SexualPreferenceID,
-		Pictures:           pictures,
-		ViewCounter:        profile.ViewCounter,
-		IsOnline:           profile.IsOnline,
-		LastOnlineAt:       profile.LastOnlineAt,
-		AccountStatus:      profile.AccountStatus,
+	var tagsList entity.TagsList
+	var pictures entity.Pictures
+
+	if err := json.Unmarshal(source.TagsList, &tagsList); err == nil {
+		dest.TagsList = tagsList
+	}
+	if err := json.Unmarshal(source.Pictures, &pictures); err == nil {
+		dest.Pictures = pictures
+	}
+
+	return dest
+}
+
+func FromProfileToProfileFrontDto(source *entity.Profile) *dto.ProfileFrontDto {
+	if source == nil {
+		return nil
+	}
+
+	return &dto.ProfileFrontDto{
+		ID:               source.ID,
+		UserID:           source.UserID,
+		FirstName:        source.FirstName,
+		LastName:         source.LastName,
+		Location:         source.Location,
+		LikesCounter:     source.LikesCounter,
+		Gender:           source.Gender,
+		TagsList:         source.TagsList.Tags,
+		Biography:        source.Biography,
+		SexualPreference: source.SexualPreference,
+		Pictures:         source.Pictures.Picture,
+		ViewCounter:      source.ViewCounter,
+		IsOnline:         source.IsOnline,
+		LastOnlineAt:     source.LastOnlineAt,
+		AccountStatus:    source.AccountStatus,
 	}
 }

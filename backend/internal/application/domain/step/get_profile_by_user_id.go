@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func GetProfileByUserIDStep(e interface{}) error {
@@ -18,12 +19,18 @@ func GetProfileByUserIDStep(e interface{}) error {
 		if err != nil {
 			return err
 		}
-		loginIntention.Profile = *profile
+		loginIntention.ProfileStatus = profile.AccountStatus
 		return nil
 	}
 	profileIntention, ok := e.(*entity.ProfileIntention)
 	if ok {
-		profile, err := getProfileByUserID(profileIntention.User.ID)
+		var userID uint64
+		if profileIntention.User.ID != 0 {
+			userID = profileIntention.User.ID
+		} else {
+			userID = profileIntention.JwtObj.UserID
+		}
+		profile, err := getProfileByUserID(userID)
 		if err != nil {
 			return err
 		}
@@ -72,5 +79,50 @@ func getProfileByUserID(userID uint64) (*entity.Profile, error) {
 	if err != nil {
 		return nil, err
 	}
-	return mapper.ToProfile(&profile), nil
+
+	res := mapper.FromProfileDtoToProfile(&profile)
+	gender, getGenderErr := getGender(profile.GenderID, db)
+	if getGenderErr != nil {
+		return nil, getGenderErr
+	}
+	res.Gender = gender
+	sexualPreference, getSexualPreferenceErr := getSexualPreferenceList(profile.SexualPreferenceID, db)
+	if getSexualPreferenceErr != nil {
+		return nil, getSexualPreferenceErr
+	}
+	res.SexualPreference = sexualPreference
+
+	return res, nil
+}
+
+func getGender(genderID uint64, db *sql.DB) (string, error) {
+	query := `SELECT * FROM gender WHERE id = $1 LIMIT 1`
+	row := db.QueryRow(query, genderID)
+
+	var gender dto.GenderDto
+	err := row.Scan(
+		&gender.ID,
+		&gender.Type,
+	)
+	if err != nil {
+		return defines.EmptyString, err
+	}
+
+	return gender.Type, nil
+}
+
+func getSexualPreferenceList(sexualPreferenceID uint64, db *sql.DB) ([]string, error) {
+	query := `SELECT * FROM sexual_preference WHERE id = $1 LIMIT 1`
+	row := db.QueryRow(query, sexualPreferenceID)
+
+	var sexualPreference dto.SexualPreferenceDto
+	err := row.Scan(
+		&sexualPreference.ID,
+		&sexualPreference.Option,
+	)
+	if err != nil {
+		return []string{}, err
+	}
+
+	return strings.Split(sexualPreference.Option, defines.SexualPreferenceSeparator), nil
 }
