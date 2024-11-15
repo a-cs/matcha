@@ -1,33 +1,42 @@
 package defines
 
-const (
-	EmptyString = ""
-	EmptyJson   = "{}"
+import "time"
 
+const (
 	// Errors
-	CannotParseJSONRequest   = "cannot parse JSON request"
-	InvalidRequestBody       = "invalid request body"
-	CannotHashPassword       = "cannot hash password"
-	CannotGenerateSlugID     = "cannot generate slug id"
-	CannotSaveUserOnDatabase = "cannot save user on database"
-	CannotSendEmail          = "cannot send email"
-	CannotGetUserByEmail     = "cannot get user by email"
-	CannotGetUserByUsername  = "cannot get user by username"
-	CannotGetUserBySlugID    = "cannot get user by slug id"
-	CannotGetProfileByUserID = "cannot get profile by user id"
-	CannotUpdateUser         = "cannot update user"
-	CannotUpdateProfile      = "cannot update profile"
-	AccountAlreadyActive     = "account already active"
-	CannotValidateLogin      = "cannot validate login"
-	InvalidPassword          = "invalid password"
-	UsernameMustToBeProvided = "username must to be provided"
-	AccountNotActiveYet      = "account not active yet"
+	CannotParseJSONRequest         = "cannot parse JSON request"
+	CannotHashPassword             = "cannot hash password"
+	CannotGenerateSlugID           = "cannot generate slug id"
+	CannotSaveUserOnDatabase       = "cannot save user on database"
+	CannotSendEmail                = "cannot send email"
+	CannotGetUserByEmail           = "cannot get user by email"
+	CannotGetUserByUsername        = "cannot get user by username"
+	CannotGetUserBySlugID          = "cannot get user by slug id"
+	CannotGetProfileByUserID       = "cannot get profile by user id"
+	CannotUpdateUser               = "cannot update user"
+	CannotUpdateProfile            = "cannot update profile"
+	CannotValidateLogin            = "cannot validate login"
+	CannotValidateJwt              = "cannot validate jwt"
+	CannotCheckBrokenAccessControl = "cannot check broken access control"
+	CannotValidateRequest          = "cannot validate request"
+	CannotCreateSexualPreference   = "cannot create sexual preference"
+	InvalidRequestBody             = "invalid request body"
+	AccountAlreadyActive           = "account already active"
+	InvalidPassword                = "invalid password"
+	UsernameMustToBeProvided       = "username must to be provided"
+	AccountNotActiveYet            = "account not active yet"
+	AuthorizationMustToBeProvided  = "authorization must to be provided"
+	UnauthorizedRequest            = "unauthorized request"
 
 	// Regex
 	EmailRegex = `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 
-	PendingStatus = "pending"
-	ActiveStatus  = "active"
+	PendingStatus             = "pending"
+	ActiveStatus              = "active"
+	EmptyString               = ""
+	EmptyJson                 = "{}"
+	JwtExpirationTime         = time.Hour * 24
+	SexualPreferenceSeparator = "_"
 )
 
 var (

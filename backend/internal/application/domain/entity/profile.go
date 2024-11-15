@@ -1,9 +1,15 @@
 package entity
 
+import "backend/internal/adpter/dto"
+
 type ProfileIntention struct {
-	Username string
-	User     User
-	Profile  Profile
+	Username        string
+	User            User
+	Profile         Profile
+	ProfileRequest  dto.ProfileFrontDto
+	JwtToken        string
+	JwtObj          JwtObj
+	ProfileResponse dto.ProfileFrontDto
 }
 
 type Profile struct {
@@ -14,22 +20,22 @@ type Profile struct {
 	Location           string
 	LikesCounter       uint64
 	GenderID           uint64
-	TagsList           []Tags
+	Gender             string
+	TagsList           TagsList
 	Biography          string
 	SexualPreferenceID uint64
-	Pictures           []Picture
+	SexualPreference   []string
+	Pictures           Pictures
 	ViewCounter        uint64
 	IsOnline           bool
 	LastOnlineAt       string
 	AccountStatus      string
 }
 
-type Tags struct {
-	ID   uint64
-	Name string
+type TagsList struct {
+	Tags []string
 }
 
-type Picture struct {
-	ID  uint64
-	Url string
+type Pictures struct {
+	Picture []string
 }
