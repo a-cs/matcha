@@ -13,11 +13,16 @@ export default function EditProfile() {
 	const [loading, setLoading] = useState(false)
 
 	const [genderOptions, setGenderOptions] = useState<string[]>([])
-	// const pictureSrc = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+	const [profileSrc, setpProfileSrc] = useState("")
+	const [picturesSrc, setPicturesSrc] = useState<string[]>([])
 
-	// const pictures = [
-	// 	pictureSrc, pictureSrc, pictureSrc, pictureSrc
-	// ]
+	const profile = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+	const pictureSrc1 = "https://images.unsplash.com/photo-1476254592636-2a8e23b256fe?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+	const pictureSrc2 = "https://images.unsplash.com/photo-1474291102916-622af5ff18bb?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+	const pictureSrc3 = "https://images.unsplash.com/photo-1525715843408-5c6ec44503b1?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+	const pictureSrc4 = "https://images.unsplash.com/photo-1478144113946-d55adda4e24e?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+
+
 
 	const formData = {
 		"id": 123,
@@ -55,6 +60,10 @@ export default function EditProfile() {
 
 	useEffect(() => {
 		setGenderOptions(["male", "female", "non-binary"])
+		setPicturesSrc([
+			pictureSrc1, pictureSrc2, pictureSrc3, pictureSrc4
+		])
+		setpProfileSrc(profile)
 	}, [])
 
 
@@ -75,50 +84,33 @@ export default function EditProfile() {
 									</Grid2>
 									<Grid2 container columnGap={{ xs: "32px", md: "64px" }} rowGap={"24px"} size={{ xs: 12 }} direction={"row"} my={6} justifyContent={"center"}>
 										<Grid2 size={{ xs: 12 }} display={"flex"} justifyContent={"center"}>
-											<Paper elevation={8} sx={{ borderRadius: '16px', padding: "8px", width: "132px", height: "132px", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid", borderColor: "primary.main", position: "relative", borderBottomRightRadius: 0 }} title="Profile">
-												<AccountBoxIcon sx={{
-													fontSize: "22px", color: "primary.main", position: "absolute", bottom: -4, right: -4
-												}} />
-												<Box component={"img"} sx={{ borderRadius: '16px', height: "120px", border: "2px solid", borderColor: "#fff" }} src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+											<Paper elevation={4} sx={{ borderRadius: '8px', padding: "8px", minWidth: "132px", width: "132px", minHeight: "132px", height: "132px", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid", borderColor: "#ccc", position: "relative", borderBottomRightRadius: 0 }} title="Profile">
+												<Box sx={{ backgroundColor: "#ccc", position: "absolute", bottom: -2, right: -2, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px" }}>
+													<AccountBoxIcon sx={{
+														fontSize: "32px", color: "white",
+													}} />
+												</Box>
+												<Box component={"img"} sx={{ borderRadius: '8px', maxWidth: "112px", height: "112px", border: "1px solid", borderColor: "#ccc" }} src={profileSrc}>
 												</Box>
 											</Paper>
 										</Grid2>
-										<Grid2 size={{ xs: 5, md: 1 }} display={"flex"} justifyContent={"center"}>
-											<Paper elevation={4} sx={{ borderRadius: '12px', padding: "8px", width: "132px", height: "132px", display: "flex", alignItems: "center", justifyContent: "center", border:"2px solid", borderColor: "secondary.main", position: "relative", borderBottomRightRadius: 0 }}>
-												<PhotoIcon sx={{
-													fontSize: "16px", color: "secondary.main", position: "absolute", bottom: -2, right: -3
-												}} />
-												<Box component={"img"} sx={{ borderRadius: '16px', height: "120px", border: "2px solid", borderColor: "#ccc" }} src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-												</Box>
-											</Paper>
-										</Grid2>
-										<Grid2 size={{ xs: 5, md: 1 }} display={"flex"} justifyContent={"center"}>
-											<Paper elevation={4} sx={{ borderRadius: '12px', padding: "8px", width: "132px", height: "132px", display: "flex", alignItems: "center", justifyContent: "center", border:"2px solid", borderColor: "secondary.main", position: "relative", borderBottomRightRadius: 0 }}>
-												<PhotoIcon sx={{
-													fontSize: "16px", color: "secondary.main", position: "absolute", bottom: -2, right: -3
-												}} />
-												<Box component={"img"} sx={{ borderRadius: '16px', height: "120px", border: "2px solid", borderColor: "#ccc" }} src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-												</Box>
-											</Paper>
-										</Grid2>
-										<Grid2 size={{ xs: 5, md: 1 }} display={"flex"} justifyContent={"center"}>
-											<Paper elevation={4} sx={{ borderRadius: '12px', padding: "8px", width: "132px", height: "132px", display: "flex", alignItems: "center", justifyContent: "center", border:"2px solid", borderColor: "secondary.main", position: "relative", borderBottomRightRadius: 0 }}>
-												<PhotoIcon sx={{
-													fontSize: "16px", color: "secondary.main", position: "absolute", bottom: -2, right: -3
-												}} />
-												<Box component={"img"} sx={{ borderRadius: '16px', height: "120px", border: "2px solid", borderColor: "#ccc" }} src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-												</Box>
-											</Paper>
-										</Grid2>
-										<Grid2 size={{ xs: 5, md: 1 }} display={"flex"} justifyContent={"center"}>
-											<Paper elevation={4} sx={{ borderRadius: '12px', padding: "8px", width: "132px", height: "132px", display: "flex", alignItems: "center", justifyContent: "center", border:"2px solid", borderColor: "secondary.main", position: "relative", borderBottomRightRadius: 0 }}>
-												<PhotoIcon sx={{
-													fontSize: "16px", color: "secondary.main", position: "absolute", bottom: -2, right: -3
-												}} />
-												<Box component={"img"} sx={{ borderRadius: '16px', height: "120px", border: "2px solid", borderColor: "#ccc" }} src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-												</Box>
-											</Paper>
-										</Grid2>
+
+										{
+											picturesSrc?.map((src: string, index) => (
+												<Grid2 key={index} size={{ xs: 5, md: 1 }} display={"flex"} justifyContent={"center"}>
+													<Paper elevation={4} sx={{ borderRadius: '8px', padding: "8px", minWidth: "100px", width: "100px", minHeight: "100px", height: "100px", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid", borderColor: "#ccc", position: "relative", borderBottomRightRadius: 0 }}>
+														<Box sx={{ backgroundColor: "#ccc", position: "absolute", bottom: -3, right: -2, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px" }}>
+															<PhotoIcon sx={{
+																fontSize: "32px", color: "white",
+															}} />
+														</Box>
+														<Box component={"img"} sx={{ borderRadius: '8px', maxWidth: "88px", height: "88px", border: "1px solid", borderColor: "#ccc" }} src={src}>
+														</Box>
+													</Paper>
+												</Grid2>
+											))
+										}
+
 									</Grid2>
 								</Grid2>
 								<Grid2 container spacing={2} >
