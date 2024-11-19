@@ -30,6 +30,15 @@ func GetUserByEmailStep(e interface{}) error {
 		loginIntention.User = *user
 		return nil
 	}
+	passwordIntention, ok := e.(*entity.PasswordIntention)
+	if ok {
+		user, err := getUserByEmail(passwordIntention.Email)
+		if err != nil {
+			return err
+		}
+		passwordIntention.User = *user
+		return nil
+	}
 
 	return errors.New(defines.CannotGetUserByEmail)
 }
@@ -52,7 +61,7 @@ func getUserByEmail(email string) (*entity.User, error) {
 	row := db.QueryRow(query, email)
 
 	var user dto.UserDto
-	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username, &user.ActiveMatches, &user.AccountStatus, &user.SlugID)
+	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username, &user.ActiveMatches, &user.AccountStatus, &user.SlugID, &user.RecoverPasswordSlugID)
 	if err != nil {
 		return nil, err
 	}

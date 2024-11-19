@@ -21,6 +21,15 @@ func GetUserByUsernameStep(e interface{}) error {
 		profileIntention.User = *user
 		return nil
 	}
+	changePasswordIntention, ok := e.(*entity.PasswordIntention)
+	if ok {
+		user, err := getUserByUsername(changePasswordIntention.JwtObj.Username)
+		if err != nil {
+			return err
+		}
+		changePasswordIntention.User = *user
+		return nil
+	}
 
 	return errors.New(defines.CannotGetUserByUsername)
 }
@@ -43,7 +52,7 @@ func getUserByUsername(username string) (*entity.User, error) {
 	row := db.QueryRow(query, username)
 
 	var user dto.UserDto
-	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username, &user.ActiveMatches, &user.AccountStatus, &user.SlugID)
+	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username, &user.ActiveMatches, &user.AccountStatus, &user.SlugID, &user.RecoverPasswordSlugID)
 	if err != nil {
 		return nil, err
 	}

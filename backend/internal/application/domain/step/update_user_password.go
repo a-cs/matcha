@@ -9,21 +9,16 @@ import (
 	"os"
 )
 
-func UpdateUserOnDatabaseStep(e interface{}) error {
-	confirmAccountIntention, ok := e.(*entity.ConfirmAccountIntention)
+func UpdateUserPasswordStep(e interface{}) error {
+	changePasswordIntention, ok := e.(*entity.PasswordIntention)
 	if ok {
-		confirmAccountIntention.User.AccountStatus = defines.ActiveStatus
-		return updateUser(&confirmAccountIntention.User)
-	}
-	passwordIntention, ok := e.(*entity.PasswordIntention)
-	if ok {
-		return updateUser(&passwordIntention.User)
+		return updatePasswordUser(changePasswordIntention.User.ID, changePasswordIntention.HashedPassword)
 	}
 
 	return errors.New(defines.CannotUpdateUser)
 }
 
-func updateUser(user *entity.User) error {
+func updatePasswordUser(userID uint64, newPassword string) error {
 	dataSourceName := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=%s",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -37,14 +32,11 @@ func updateUser(user *entity.User) error {
 	}
 	defer db.Close()
 
-	query := `UPDATE users SET username = $1, active_matches = $2, account_status = $3, recovery_slug_id = $4 WHERE id = $5`
+	query := `UPDATE users SET password = $1 WHERE id = $2`
 	_, execErr := db.Exec(
 		query,
-		user.Username,
-		user.ActiveMatches,
-		user.AccountStatus,
-		user.RecoverPasswordSlugID,
-		user.ID,
+		newPassword,
+		userID,
 	)
 	if execErr != nil {
 		return execErr

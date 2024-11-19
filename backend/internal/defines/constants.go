@@ -1,6 +1,8 @@
 package defines
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	// Errors
@@ -31,12 +33,18 @@ const (
 	// Regex
 	EmailRegex = `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 
-	PendingStatus             = "pending"
-	ActiveStatus              = "active"
-	EmptyString               = ""
-	EmptyJson                 = "{}"
-	JwtExpirationTime         = time.Hour * 24
-	SexualPreferenceSeparator = "_"
+	PendingStatus                    = "pending"
+	ActiveStatus                     = "active"
+	EmptyString                      = ""
+	EmptyJson                        = "{}"
+	JwtExpirationTime                = time.Hour * 24
+	RecoverPasswordJwtExpirationTime = time.Minute * 15
+	SexualPreferenceSeparator        = "_"
+
+	ActiveAccountEmailSubject   = "Welcome to Matcha!"
+	ActiveAccountEmailContent   = "Welcome aboard!\n\nClick here to activate your account: "
+	RecoverPasswordEmailSubject = "Recover your Matcha password"
+	RecoverPasswordEmailContent = "Click here to recover your password: "
 )
 
 var (
