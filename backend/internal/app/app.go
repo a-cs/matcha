@@ -1,19 +1,28 @@
 package app
 
 import (
-	"backend/internal/adpter/app"
-	"backend/internal/adpter/in/handler"
-	"backend/internal/application/port/in"
-	"backend/internal/application/port/usecase"
 	"fmt"
 	"net/http"
 	"os"
 	"time"
+
+	"backend/internal/adpter/app"
+	"backend/internal/adpter/in/handler"
+	"backend/internal/application/port/in"
+	"backend/internal/application/port/usecase"
 )
 
 func Start() error {
 	app.Build()
-	handlers := handler.NewHandler(CreateUser(), ConfirmAccount(), Login(), GetProfile(), UpdateProfile())
+	handlers := handler.NewHandler(
+		CreateUser(),
+		ConfirmAccount(),
+		Login(),
+		GetProfile(),
+		UpdateProfile(),
+		RecoverPassword(),
+		ChangePassword(),
+	)
 
 	mux := initRouter(handlers)
 	loggedMux := logRoutes(mux)
@@ -55,6 +64,14 @@ func GetProfile() in.GetProfile {
 
 func UpdateProfile() in.UpdateProfile {
 	return usecase.NewUpdateProfileUseCase()
+}
+
+func RecoverPassword() in.RecoverPassword {
+	return usecase.NewRecoverPasswordUseCase()
+}
+
+func ChangePassword() in.ChangePassword {
+	return usecase.NewChangePasswordUseCase()
 }
 
 func logRoutes(h http.Handler) http.Handler {

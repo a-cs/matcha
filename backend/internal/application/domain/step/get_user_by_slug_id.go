@@ -46,7 +46,7 @@ func getUserBySlugID(slugID string) (*entity.User, error) {
 	row := db.QueryRow(query, slugID)
 
 	var user dto.UserDto
-	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username, &user.ActiveMatches, &user.AccountStatus, &user.SlugID)
+	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username, &user.ActiveMatches, &user.AccountStatus, &user.SlugID, &user.RecoverPasswordSlugID)
 	if err != nil {
 		return nil, err
 	}

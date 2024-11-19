@@ -47,7 +47,8 @@ CREATE TABLE "users"(
     "username" VARCHAR(255) UNIQUE NOT NULL,
     "active_matches" JSON NOT NULL,
     "account_status" VARCHAR(255) NOT NULL,
-    "slug_id" VARCHAR(255) NOT NULL
+    "slug_id" VARCHAR(255) NOT NULL,
+    "recovery_slug_id" VARCHAR(255)
 );
 CREATE TABLE "sexual_preference"(
     "id" SERIAL PRIMARY KEY,

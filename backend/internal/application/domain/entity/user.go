@@ -9,11 +9,12 @@ type CreateUser struct {
 }
 
 type User struct {
-	ID            uint64
-	Email         string
-	Password      string
-	Username      string
-	ActiveMatches interface{}
-	AccountStatus string
-	SlugID        string
+	ID                    uint64
+	Email                 string
+	Password              string
+	Username              string
+	ActiveMatches         interface{}
+	AccountStatus         string
+	SlugID                string
+	RecoverPasswordSlugID string
 }

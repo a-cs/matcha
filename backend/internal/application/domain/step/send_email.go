@@ -9,22 +9,30 @@ import (
 )
 
 func SendEmailStep(e interface{}) error {
-	intention, ok := e.(*entity.CreateUserIntention)
-	if !ok {
-		return errors.New(defines.CannotSendEmail)
+	createUserIntention, ok := e.(*entity.CreateUserIntention)
+	if ok {
+		return sendEmail(
+			createUserIntention.CreateUser.Email,
+			defines.ActiveAccountEmailSubject,
+			defines.ActiveAccountEmailContent+os.Getenv("FRONTEND_URL")+"/confirm/"+createUserIntention.SlugID)
+	}
+	passwordIntention, ok := e.(*entity.PasswordIntention)
+	if ok {
+		return sendEmail(
+			passwordIntention.User.Email,
+			defines.RecoverPasswordEmailSubject,
+			defines.RecoverPasswordEmailContent+os.Getenv("FRONTEND_URL")+"/recover/"+passwordIntention.User.RecoverPasswordSlugID)
 	}
 
-	return sendEmail(intention)
+	return errors.New(defines.CannotSendEmail)
 }
 
-func sendEmail(intention *entity.CreateUserIntention) error {
+func sendEmail(email, subject, message string) error {
 	m := gomail.NewMessage()
 	m.SetHeader("From", "noreply@matcha.com")
-	m.SetHeader("To", intention.CreateUser.Email)
-	m.SetHeader("Subject", "Welcome to Matcha!")
-	m.SetBody(
-		"text/plain",
-		"Welcome aboard!\n\nClick here to activate your account: "+os.Getenv("FRONTEND_URL")+"/confirm/"+intention.SlugID)
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/plain", message)
 
 	d := gomail.NewDialer("smtp.gmail.com", 587, os.Getenv("SMTP_EMAIL"), os.Getenv("SMTP_EMAIL_PASSWORD"))
 

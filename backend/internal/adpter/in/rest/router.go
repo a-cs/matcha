@@ -12,4 +12,6 @@ func Routes(mux *goji.Mux, handlers handler.Handler) {
 	mux.HandleFunc(pat.Post("/login"), handlers.Login)
 	mux.HandleFunc(pat.Get("/profile/:username"), handlers.GetProfile)
 	mux.HandleFunc(pat.Put("/profile"), handlers.UpdateProfile)
+	mux.HandleFunc(pat.Post("/recover"), handlers.RecoverPassword)
+	mux.HandleFunc(pat.Post("/change"), handlers.ChangePassword)
 }

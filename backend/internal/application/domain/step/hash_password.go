@@ -8,20 +8,33 @@ import (
 )
 
 func HashPasswordStep(e interface{}) error {
-	intention, ok := e.(*entity.CreateUserIntention)
-	if !ok {
-		return errors.New(defines.CannotHashPassword)
+	createUserIntention, ok := e.(*entity.CreateUserIntention)
+	if ok {
+		hashedPassword, err := hashPassword(createUserIntention.CreateUser.Password)
+		if err != nil {
+			return err
+		}
+		createUserIntention.HashedPassword = hashedPassword
+		return nil
+	}
+	changePasswordIntention, ok := e.(*entity.PasswordIntention)
+	if ok {
+		hashedPassword, err := hashPassword(changePasswordIntention.NewPassword)
+		if err != nil {
+			return err
+		}
+		changePasswordIntention.HashedPassword = hashedPassword
+		return nil
 	}
 
-	return hashPassword(intention)
+	return errors.New(defines.CannotHashPassword)
 }
 
-func hashPassword(intention *entity.CreateUserIntention) error {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(intention.CreateUser.Password), bcrypt.DefaultCost)
+func hashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return defines.EmptyString, err
 	}
-	intention.HashedPassword = string(hashedPassword)
 
-	return nil
+	return string(hashedPassword), nil
 }

@@ -25,6 +25,15 @@ func ValidateJwtStep(e interface{}) error {
 		profileIntention.JwtObj = *res
 		return nil
 	}
+	changePasswordIntention, ok := e.(*entity.PasswordIntention)
+	if ok {
+		res, err := validateJwt(changePasswordIntention.JwtToken)
+		if err != nil {
+			return err
+		}
+		changePasswordIntention.JwtObj = *res
+		return nil
+	}
 
 	return errors.New(defines.CannotValidateJwt)
 }

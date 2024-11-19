@@ -13,21 +13,32 @@ import (
 func GenerateJWTStep(e interface{}) error {
 	loginIntention, ok := e.(*entity.LoginIntention)
 	if ok {
-		res, err := generateJwt(loginIntention.User.ID, loginIntention.User.Username, loginIntention.ProfileStatus)
+		exp := time.Now().Add(defines.JwtExpirationTime).Unix()
+		res, err := generateJwt(loginIntention.User.ID, loginIntention.User.Username, loginIntention.ProfileStatus, exp)
 		if err != nil {
 			return err
 		}
 		loginIntention.JwtResponse = *res
 		return nil
 	}
+	passwordIntention, ok := e.(*entity.PasswordIntention)
+	if ok {
+		exp := time.Now().Add(defines.RecoverPasswordJwtExpirationTime).Unix()
+		res, err := generateJwt(passwordIntention.User.ID, passwordIntention.User.Username, defines.EmptyString, exp)
+		if err != nil {
+			return err
+		}
+		passwordIntention.User.RecoverPasswordSlugID = res.Token
+		return nil
+	}
 
 	return errors.New(defines.CannotGenerateSlugID)
 }
 
-func generateJwt(userID uint64, username, profileStatus string) (*entity.JwtResponse, error) {
+func generateJwt(userID uint64, username, profileStatus string, exp int64) (*entity.JwtResponse, error) {
 	secretKey := []byte(os.Getenv("JWT_SECRET"))
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, createJwtObj(userID, username))
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, createJwtObj(userID, username, exp))
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
 		return nil, err
@@ -40,11 +51,11 @@ func generateJwt(userID uint64, username, profileStatus string) (*entity.JwtResp
 	}, nil
 }
 
-func createJwtObj(userID uint64, username string) jwt.MapClaims {
+func createJwtObj(userID uint64, username string, exp int64) jwt.MapClaims {
 	return jwt.MapClaims{
 		"user_id":  userID,
 		"username": username,
 		"iat":      time.Now().Unix(),
-		"exp":      time.Now().Add(defines.JwtExpirationTime).Unix(),
+		"exp":      exp,
 	}
 }

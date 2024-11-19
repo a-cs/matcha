@@ -18,6 +18,8 @@ type Handler struct {
 	loginUseCase          in.Login
 	getProfile            in.GetProfile
 	updateProfile         in.UpdateProfile
+	recoverPassword       in.RecoverPassword
+	changePassword        in.ChangePassword
 }
 
 func NewHandler(
@@ -26,6 +28,8 @@ func NewHandler(
 	l in.Login,
 	gp in.GetProfile,
 	up in.UpdateProfile,
+	rp in.RecoverPassword,
+	cp in.ChangePassword,
 ) Handler {
 	return Handler{
 		createUserUseCase:     cu,
@@ -33,6 +37,8 @@ func NewHandler(
 		loginUseCase:          l,
 		getProfile:            gp,
 		updateProfile:         up,
+		recoverPassword:       rp,
+		changePassword:        cp,
 	}
 }
 
@@ -186,4 +192,61 @@ func (h Handler) UpdateProfile(responseWriter http.ResponseWriter, ctx *http.Req
 	}
 
 	utils.ServiceResponse(responseWriter, profileIntention.ProfileRequest, http.StatusOK)
+}
+
+func (h Handler) RecoverPassword(responseWriter http.ResponseWriter, ctx *http.Request) {
+	recoverPassword := new(dto.RecoverRequestDto)
+	if err := json.NewDecoder(ctx.Body).Decode(recoverPassword); err != nil {
+		resp := dto.ResponseDTO{Message: defines.CannotParseJSONRequest}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	if !recoverPassword.IsValid() {
+		resp := dto.ResponseDTO{Message: defines.InvalidRequestBody}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	passwordIntention := entity.PasswordIntention{
+		Email: recoverPassword.Email,
+	}
+
+	err := h.recoverPassword.Execute(&passwordIntention)
+	if err != nil {
+		resp := dto.ResponseDTO{Message: err.Error()}
+		utils.ServiceResponse(responseWriter, resp, http.StatusInternalServerError)
+		return
+	}
+
+	responseWriter.WriteHeader(http.StatusOK)
+}
+
+func (h Handler) ChangePassword(responseWriter http.ResponseWriter, ctx *http.Request) {
+	changePassword := new(dto.ChangePasswordDto)
+	if err := json.NewDecoder(ctx.Body).Decode(changePassword); err != nil {
+		resp := dto.ResponseDTO{Message: defines.CannotParseJSONRequest}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	if !changePassword.IsValid() {
+		resp := dto.ResponseDTO{Message: defines.InvalidRequestBody}
+		utils.ServiceResponse(responseWriter, resp, http.StatusBadRequest)
+		return
+	}
+
+	passwordIntention := entity.PasswordIntention{
+		NewPassword: changePassword.NewPassword,
+		JwtToken:    changePassword.Token,
+	}
+
+	err := h.changePassword.Execute(&passwordIntention)
+	if err != nil {
+		resp := dto.ResponseDTO{Message: err.Error()}
+		utils.ServiceResponse(responseWriter, resp, http.StatusInternalServerError)
+		return
+	}
+
+	responseWriter.WriteHeader(http.StatusOK)
 }

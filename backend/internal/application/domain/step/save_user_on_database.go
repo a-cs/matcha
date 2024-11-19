@@ -32,7 +32,7 @@ func saveUserOnDatabase(intention *entity.CreateUserIntention) error {
 	}
 	defer db.Close()
 
-	query := `INSERT INTO users (email, password, username, active_matches, account_status, slug_id) VALUES ($1, $2, $3, $4, $5, $6)`
+	query := `INSERT INTO users (email, password, username, active_matches, account_status, slug_id, recovery_slug_id) VALUES ($1, $2, $3, $4, $5, $6, $7)`
 	_, execErr := db.Exec(
 		query,
 		intention.CreateUser.Email,
@@ -41,6 +41,7 @@ func saveUserOnDatabase(intention *entity.CreateUserIntention) error {
 		defines.EmptyJson,
 		defines.PendingStatus,
 		intention.SlugID,
+		defines.EmptyString,
 	)
 	if execErr != nil {
 		return execErr
