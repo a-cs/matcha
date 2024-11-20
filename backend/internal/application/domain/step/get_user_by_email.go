@@ -16,7 +16,8 @@ func GetUserByEmailStep(e interface{}) error {
 	if ok {
 		user, err := getUserByEmail(createUserIntention.CreateUser.Email)
 		if err != nil {
-			return err
+			createUserIntention.StepError = err
+			return nil
 		}
 		createUserIntention.User = *user
 		return nil
@@ -53,7 +54,7 @@ func getUserByEmail(email string) (*entity.User, error) {
 		os.Getenv("DB_SSLMODE"))
 	db, err := sql.Open("postgres", dataSourceName)
 	if err != nil {
-		return nil, errors.New(defines.CannotGetUserByEmail)
+		return nil, errors.New(defines.CannotEstablishDatabaseConnection)
 	}
 	defer db.Close()
 

@@ -35,7 +35,7 @@ func updateProfile(previousProfile *entity.Profile, newProfile *dto.ProfileFront
 		os.Getenv("DB_SSLMODE"))
 	db, connErr := sql.Open("postgres", dataSourceName)
 	if connErr != nil {
-		return errors.New(defines.CannotUpdateProfile)
+		return errors.New(defines.CannotEstablishDatabaseConnection)
 	}
 	defer db.Close()
 

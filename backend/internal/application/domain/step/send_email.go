@@ -11,10 +11,14 @@ import (
 func SendEmailStep(e interface{}) error {
 	createUserIntention, ok := e.(*entity.CreateUserIntention)
 	if ok {
-		return sendEmail(
+		err := sendEmail(
 			createUserIntention.CreateUser.Email,
 			defines.ActiveAccountEmailSubject,
 			defines.ActiveAccountEmailContent+os.Getenv("FRONTEND_URL")+"/confirm/"+createUserIntention.SlugID)
+		if err != nil {
+			createUserIntention.StepError = err
+		}
+		return nil
 	}
 	passwordIntention, ok := e.(*entity.PasswordIntention)
 	if ok {

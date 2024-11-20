@@ -51,7 +51,7 @@ func getProfileByUserID(userID uint64) (*entity.Profile, error) {
 		os.Getenv("DB_SSLMODE"))
 	db, err := sql.Open("postgres", dataSourceName)
 	if err != nil {
-		return nil, errors.New(defines.CannotGetProfileByUserID)
+		return nil, errors.New(defines.CannotEstablishDatabaseConnection)
 	}
 	defer db.Close()
 
