@@ -19,7 +19,7 @@ func GenerateSlugIDStep(e interface{}) error {
 func generateUUID(intention *entity.CreateUserIntention) error {
 	u, err := uuid.NewUUID()
 	if err != nil {
-		return err
+		return errors.New(defines.CannotGenerateSlugID)
 	}
 	intention.SlugID = u.String()
 	return nil

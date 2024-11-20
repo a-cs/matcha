@@ -35,7 +35,7 @@ func updateProfile(previousProfile *entity.Profile, newProfile *dto.ProfileFront
 		os.Getenv("DB_SSLMODE"))
 	db, connErr := sql.Open("postgres", dataSourceName)
 	if connErr != nil {
-		panic(connErr.Error())
+		return errors.New(defines.CannotUpdateProfile)
 	}
 	defer db.Close()
 
@@ -69,7 +69,7 @@ func updateProfile(previousProfile *entity.Profile, newProfile *dto.ProfileFront
 		updatedProfile.ID,
 	)
 	if execErr != nil {
-		return execErr
+		return errors.New(defines.CannotUpdateProfile)
 	}
 
 	return nil
@@ -107,7 +107,7 @@ func getGenderID(genderValue string, db *sql.DB) (uint64, error) {
 		&gender.Type,
 	)
 	if err != nil {
-		return 0, err
+		return 0, errors.New(defines.CannotGetGenderID)
 	}
 
 	return uint64(gender.ID), nil
@@ -126,7 +126,7 @@ func getSexualPreferenceID(sexualPreferenceList []string, db *sql.DB) (uint64, e
 		&sexualPreference.Option,
 	)
 	if err != nil {
-		return 0, err
+		return 0, errors.New(defines.CannotGetSexualPreferenceID)
 	}
 
 	return uint64(sexualPreference.ID), nil

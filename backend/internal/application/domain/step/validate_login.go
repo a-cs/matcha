@@ -18,7 +18,7 @@ func ValidateLoginStep(e interface{}) error {
 
 func validateLogin(intention *entity.LoginIntention) error {
 	if err := bcrypt.CompareHashAndPassword([]byte(intention.User.Password), []byte(intention.Password)); err != nil {
-		return errors.New(defines.InvalidPassword)
+		return errors.New(defines.WrongEmailOrPassword)
 	}
 	if intention.User.AccountStatus != defines.ActiveStatus {
 		return errors.New(defines.AccountNotActiveYet)

@@ -37,7 +37,7 @@ func sendEmail(email, subject, message string) error {
 	d := gomail.NewDialer("smtp.gmail.com", 587, os.Getenv("SMTP_EMAIL"), os.Getenv("SMTP_EMAIL_PASSWORD"))
 
 	if err := d.DialAndSend(m); err != nil {
-		return err
+		return errors.New(defines.CannotSendEmail)
 	}
 
 	return nil

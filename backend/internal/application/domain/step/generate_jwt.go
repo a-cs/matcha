@@ -32,7 +32,7 @@ func GenerateJWTStep(e interface{}) error {
 		return nil
 	}
 
-	return errors.New(defines.CannotGenerateSlugID)
+	return errors.New(defines.CannotGenerateJwt)
 }
 
 func generateJwt(userID uint64, username, profileStatus string, exp int64) (*entity.JwtResponse, error) {
@@ -41,7 +41,7 @@ func generateJwt(userID uint64, username, profileStatus string, exp int64) (*ent
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, createJwtObj(userID, username, exp))
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
-		return nil, err
+		return nil, errors.New(defines.CannotGenerateJwt)
 	}
 
 	return &entity.JwtResponse{
