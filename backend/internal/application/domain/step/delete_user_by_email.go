@@ -9,16 +9,23 @@ import (
 	"os"
 )
 
-func UpdateUserPasswordStep(e interface{}) error {
-	changePasswordIntention, ok := e.(*entity.PasswordIntention)
+func DeleteUserByEmailStep(e interface{}) error {
+	createUserIntention, ok := e.(*entity.CreateUserIntention)
 	if ok {
-		return updatePasswordUser(changePasswordIntention.User.ID, changePasswordIntention.HashedPassword)
+		if createUserIntention.StepError == nil {
+			return nil
+		}
+		err := deleteUserByEmail(createUserIntention.CreateUser.Email)
+		if err != nil {
+			return err
+		}
+		return createUserIntention.StepError
 	}
 
-	return errors.New(defines.CannotUpdateUserPassword)
+	return errors.New(defines.CannotDeleteUser)
 }
 
-func updatePasswordUser(userID uint64, newPassword string) error {
+func deleteUserByEmail(email string) error {
 	dataSourceName := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=%s",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -32,15 +39,10 @@ func updatePasswordUser(userID uint64, newPassword string) error {
 	}
 	defer db.Close()
 
-	query := `UPDATE users SET password = $1 WHERE id = $2`
-	_, execErr := db.Exec(
-		query,
-		newPassword,
-		userID,
-	)
+	query := `DELETE FROM users WHERE email = $1`
+	_, execErr := db.Exec(query, email)
 	if execErr != nil {
-		return errors.New(defines.CannotUpdateUserPassword)
+		return errors.New(defines.CannotDeleteUser)
 	}
-
 	return nil
 }

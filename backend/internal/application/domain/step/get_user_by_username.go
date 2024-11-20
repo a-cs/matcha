@@ -44,7 +44,7 @@ func getUserByUsername(username string) (*entity.User, error) {
 		os.Getenv("DB_SSLMODE"))
 	db, err := sql.Open("postgres", dataSourceName)
 	if err != nil {
-		return nil, errors.New(defines.CannotGetUserByUsername)
+		return nil, errors.New(defines.CannotEstablishDatabaseConnection)
 	}
 	defer db.Close()
 

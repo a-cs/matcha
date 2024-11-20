@@ -28,7 +28,7 @@ func saveUserOnDatabase(intention *entity.CreateUserIntention) error {
 		os.Getenv("DB_SSLMODE"))
 	db, connErr := sql.Open("postgres", dataSourceName)
 	if connErr != nil {
-		return errors.New(defines.CannotSaveUserOnDatabase)
+		return errors.New(defines.CannotEstablishDatabaseConnection)
 	}
 	defer db.Close()
 

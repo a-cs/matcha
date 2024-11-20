@@ -6,4 +6,5 @@ type CreateUserIntention struct {
 	Profile        Profile
 	HashedPassword string
 	SlugID         string
+	StepError      error
 }

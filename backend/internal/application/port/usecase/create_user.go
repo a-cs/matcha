@@ -18,10 +18,12 @@ func NewCreateUserUseCase() in.CreateUser {
 			step.GenerateSlugIDStep,
 			step.SaveUserOnDatabaseStep,
 			step.GetUserByEmailStep,
+			step.DeleteUserByEmailStep,
 			step.CreateProfileOnDatabaseStep,
-			// TODO: step.DeleteUserIfErrorStep,
+			step.DeleteUserByEmailStep,
 			step.SendEmailStep,
-			// TODO: step.DeleteUserIfErrorStep,
+			step.DeleteProfileByUserIDStep,
+			step.DeleteUserByEmailStep,
 		},
 	}
 }
