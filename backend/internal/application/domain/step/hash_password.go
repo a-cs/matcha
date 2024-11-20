@@ -33,7 +33,7 @@ func HashPasswordStep(e interface{}) error {
 func hashPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return defines.EmptyString, err
+		return defines.EmptyString, errors.New(defines.CannotHashPassword)
 	}
 
 	return string(hashedPassword), nil

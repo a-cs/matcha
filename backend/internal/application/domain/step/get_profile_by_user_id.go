@@ -51,7 +51,7 @@ func getProfileByUserID(userID uint64) (*entity.Profile, error) {
 		os.Getenv("DB_SSLMODE"))
 	db, err := sql.Open("postgres", dataSourceName)
 	if err != nil {
-		panic(err.Error())
+		return nil, errors.New(defines.CannotGetProfileByUserID)
 	}
 	defer db.Close()
 
@@ -77,7 +77,7 @@ func getProfileByUserID(userID uint64) (*entity.Profile, error) {
 		&profile.AccountStatus,
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.New(defines.CannotGetProfileByUserID)
 	}
 
 	res := mapper.FromProfileDtoToProfile(&profile)
@@ -105,7 +105,7 @@ func getGender(genderID uint64, db *sql.DB) (string, error) {
 		&gender.Type,
 	)
 	if err != nil {
-		return defines.EmptyString, err
+		return defines.EmptyString, errors.New(defines.CannotGetGender)
 	}
 
 	return gender.Type, nil
@@ -121,7 +121,7 @@ func getSexualPreferenceList(sexualPreferenceID uint64, db *sql.DB) ([]string, e
 		&sexualPreference.Option,
 	)
 	if err != nil {
-		return []string{}, err
+		return []string{}, errors.New(defines.CannotGetSexualPreference)
 	}
 
 	return strings.Split(sexualPreference.Option, defines.SexualPreferenceSeparator), nil

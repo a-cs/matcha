@@ -33,7 +33,7 @@ func updateUser(user *entity.User) error {
 		os.Getenv("DB_SSLMODE"))
 	db, connErr := sql.Open("postgres", dataSourceName)
 	if connErr != nil {
-		panic(connErr.Error())
+		return errors.New(defines.CannotUpdateUser)
 	}
 	defer db.Close()
 
@@ -47,7 +47,7 @@ func updateUser(user *entity.User) error {
 		user.ID,
 	)
 	if execErr != nil {
-		return execErr
+		return errors.New(defines.CannotUpdateUser)
 	}
 
 	return nil

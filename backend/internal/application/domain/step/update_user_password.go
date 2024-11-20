@@ -15,7 +15,7 @@ func UpdateUserPasswordStep(e interface{}) error {
 		return updatePasswordUser(changePasswordIntention.User.ID, changePasswordIntention.HashedPassword)
 	}
 
-	return errors.New(defines.CannotUpdateUser)
+	return errors.New(defines.CannotUpdateUserPassword)
 }
 
 func updatePasswordUser(userID uint64, newPassword string) error {
@@ -28,7 +28,7 @@ func updatePasswordUser(userID uint64, newPassword string) error {
 		os.Getenv("DB_SSLMODE"))
 	db, connErr := sql.Open("postgres", dataSourceName)
 	if connErr != nil {
-		panic(connErr.Error())
+		return errors.New(defines.CannotUpdateUserPassword)
 	}
 	defer db.Close()
 
@@ -39,7 +39,7 @@ func updatePasswordUser(userID uint64, newPassword string) error {
 		userID,
 	)
 	if execErr != nil {
-		return execErr
+		return errors.New(defines.CannotUpdateUserPassword)
 	}
 
 	return nil

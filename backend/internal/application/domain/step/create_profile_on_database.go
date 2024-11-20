@@ -13,7 +13,7 @@ import (
 func CreateProfileOnDatabaseStep(e interface{}) error {
 	intention, ok := e.(*entity.CreateUserIntention)
 	if !ok {
-		return errors.New(defines.CannotSaveUserOnDatabase)
+		return errors.New(defines.CannotCreateProfileOnDatabase)
 	}
 
 	return createProfileOnDatabase(intention)
@@ -52,7 +52,7 @@ func createProfileOnDatabase(intention *entity.CreateUserIntention) error {
 		defines.PendingStatus,
 	)
 	if execErr != nil {
-		return execErr
+		return errors.New(defines.CannotCreateProfileOnDatabase)
 	}
 	fmt.Printf("res: %v", res)
 

@@ -53,7 +53,7 @@ func getUserByEmail(email string) (*entity.User, error) {
 		os.Getenv("DB_SSLMODE"))
 	db, err := sql.Open("postgres", dataSourceName)
 	if err != nil {
-		panic(err.Error())
+		return nil, errors.New(defines.CannotGetUserByEmail)
 	}
 	defer db.Close()
 
@@ -63,7 +63,7 @@ func getUserByEmail(email string) (*entity.User, error) {
 	var user dto.UserDto
 	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username, &user.ActiveMatches, &user.AccountStatus, &user.SlugID, &user.RecoverPasswordSlugID)
 	if err != nil {
-		return nil, err
+		return nil, errors.New(defines.CannotGetUserByEmail)
 	}
 
 	return mapper.ToUser(&user), nil
