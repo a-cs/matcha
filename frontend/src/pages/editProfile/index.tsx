@@ -1,9 +1,9 @@
 import { Autocomplete, Box, Button, Chip, CircularProgress, Grid2, MenuItem, Paper, Stack, TextField, Typography } from "@mui/material";
 import { FormEvent, SyntheticEvent, useEffect, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import PhotoIcon from '@mui/icons-material/Photo';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function EditProfile() {
 	const [firstName, setFirstName] = useState('')
@@ -28,6 +28,41 @@ export default function EditProfile() {
 	const pictureSrc4 = "https://images.unsplash.com/photo-1478144113946-d55adda4e24e?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
 	const maximumNumberOfOptions = 2
+
+	const defautlPaperSxValues = {
+		borderRadius: '8px',
+		padding: "8px",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		border: "2px solid",
+		borderColor: "#ccc",
+		color: "#ccc",
+		position: "relative",
+		// borderBottomRightRadius: 0,
+		transition: "0.2s",
+		"&:hover": {
+			boxShadow: 12,
+			borderColor: "primary.main",
+			color: "primary.main",
+		}
+	}
+
+	const profilePaperSxValues = {
+		minWidth: "132px",
+		width: "132px",
+		minHeight: "132px",
+		height: "132px",
+		...defautlPaperSxValues
+	}
+
+	const picturesPaperSxValues = {
+		minWidth: "100px",
+		width: "100px",
+		minHeight: "100px",
+		height: "100px",
+		...defautlPaperSxValues
+	}
 
 	let formData = {
 		"id": 123,
@@ -86,16 +121,35 @@ export default function EditProfile() {
 	function handleSexualPrefereceChange(_event: SyntheticEvent<Element, Event>, newValue: string[] | null) {
 		SetSexualPreferences(newValue)
 	}
+
 	function handleTagsChange(_event: SyntheticEvent<Element, Event>, newValue: string[] | null) {
 		if (tags && tags?.length < maximumNumberOfOptions || newValue && newValue.length < maximumNumberOfOptions) {
 			SetTags(newValue)
 		}
 	}
 
+	function handleChangeProfilePicture() {
+		//todo
+		console.log("change profile pic")
+	}
+
+	function handleChangePictureByIndex(index: number) {
+		//todo
+		console.log("change profile pic index: ", index)
+	}
+
+	function handleAddPicture() {
+		//todo
+		console.log("add profile pic")
+	}
+
 	useEffect(() => {
 		setGenderOptions(["male", "female", "non-binary"])
 		setPicturesSrc([
-			pictureSrc1, pictureSrc2, pictureSrc3, pictureSrc4
+			pictureSrc1,
+			pictureSrc2,
+			pictureSrc3,
+			pictureSrc4
 		])
 		setpProfileSrc(profile)
 		setSexualPreferencesOptions(["asexual", "bisexual", "gay", "lesbian", "straight"])
@@ -115,35 +169,65 @@ export default function EditProfile() {
 									<Typography textAlign="center" component="h3" sx={{ typography: { xs: 'h4', md: 'h3' } }} color="#bdbdbd">Complete your profile information.</Typography>
 								</Stack>
 								<Grid2 container spacing={2} >
-									<Grid2 size={{ xs: 12 }} textAlign={"center"}>
-										<Button type="button" variant="contained" sx={{ fontSize: '32px', borderRadius: '8px', width: "132px", height: "132px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>{!loading ? <> <AddPhotoAlternateIcon sx={{ fontSize: '64px' }} /> <b>Photo</b> </> : <CircularProgress color="inherit" size={21} sx={{ my: "1.75px", mx: "29.82px" }} />}</Button>
-									</Grid2>
 									<Grid2 container columnGap={{ xs: "32px", md: "64px" }} rowGap={"24px"} size={{ xs: 12 }} direction={"row"} my={6} justifyContent={"center"}>
 										<Grid2 size={{ xs: 12 }} display={"flex"} justifyContent={"center"}>
-											<Paper elevation={4} sx={{ borderRadius: '8px', padding: "8px", minWidth: "132px", width: "132px", minHeight: "132px", height: "132px", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid", borderColor: "#ccc", position: "relative", borderBottomRightRadius: 0 }} title="Profile">
-												<Box sx={{ backgroundColor: "#ccc", position: "absolute", bottom: -2, right: -2, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px" }}>
+											<Paper component={Button} onClick={handleChangeProfilePicture} elevation={4} sx={profilePaperSxValues} title="Profile">
+												<Box sx={{ backgroundColor: "transparent", position: "absolute", bottom: -5, right: -4, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px" }}>
 													<AccountBoxIcon sx={{
-														fontSize: "32px", color: "white",
+														fontSize: "24px", color: "inherit", borderBottomRightRadius: 16
 													}} />
 												</Box>
-												<Box component={"img"} sx={{ borderRadius: '8px', maxWidth: "112px", height: "112px", border: "1px solid", borderColor: "#ccc" }} src={profileSrc}>
-												</Box>
+												{profileSrc ?
+													(<>
+														<Box component={"img"} sx={{ borderRadius: '8px', maxWidth: "110px", height: "110px", border: "1px solid", borderColor: "#ccc" }} src={profileSrc}>
+														</Box>
+													</>
+													) : (
+														<>
+															<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px", color: "inherit" }}>
+																<AddIcon sx={{
+																	fontSize: "64px", color: "inherit",
+																}} />
+															</Box>
+														</>
+													)
+
+												}
 											</Paper>
 										</Grid2>
 										{
 											picturesSrc?.map((src: string, index) => (
 												<Grid2 key={index} size={{ xs: 5, md: 1 }} display={"flex"} justifyContent={"center"}>
-													<Paper elevation={4} sx={{ borderRadius: '8px', padding: "8px", minWidth: "100px", width: "100px", minHeight: "100px", height: "100px", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid", borderColor: "#ccc", position: "relative", borderBottomRightRadius: 0 }}>
-														<Box sx={{ backgroundColor: "#ccc", position: "absolute", bottom: -3, right: -2, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px" }}>
+													<Paper component={Button} onClick={() => handleChangePictureByIndex(index)} elevation={4} sx={picturesPaperSxValues}>
+														<Box sx={{ backgroundColor: "transparent", position: "absolute", bottom: -5, right: -4, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px" }}>
 															<PhotoIcon sx={{
-																fontSize: "32px", color: "white",
+																fontSize: "24px", color: "inherit", borderBottomRightRadius: 16
 															}} />
 														</Box>
-														<Box component={"img"} sx={{ borderRadius: '8px', maxWidth: "88px", height: "88px", border: "1px solid", borderColor: "#ccc" }} src={src}>
+														<Box component={"img"} sx={{ borderRadius: '8px', maxWidth: "84px", height: "84px", border: "1px solid", borderColor: "#ccc" }} src={src}>
 														</Box>
 													</Paper>
 												</Grid2>
 											))
+										}
+										{
+											picturesSrc.length < 4 &&
+											(
+												<Grid2 size={{ xs: 5, md: 1 }} display={"flex"} justifyContent={"center"}>
+													<Paper component={Button} onClick={handleAddPicture} elevation={4} sx={picturesPaperSxValues}>
+														<Box sx={{ backgroundColor: "transparent", position: "absolute", bottom: -5, right: -4, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px" }}>
+															<PhotoIcon sx={{
+																fontSize: "24px", color: "inherit", borderBottomRightRadius: 16
+															}} />
+														</Box>
+														<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "4px", color: "inherit" }}>
+															<AddIcon sx={{
+																fontSize: "64px", color: "inherit",
+															}} />
+														</Box>
+													</Paper>
+												</Grid2>
+											)
 										}
 									</Grid2>
 								</Grid2>
