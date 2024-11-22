@@ -1,5 +1,5 @@
-import { Box, Button, CircularProgress, Grid2, MenuItem, Paper, Stack, TextField, Typography } from "@mui/material";
-import { FormEvent, useEffect, useState } from "react";
+import { Autocomplete, Box, Button, Chip, CircularProgress, Grid2, MenuItem, Paper, Stack, TextField, Typography } from "@mui/material";
+import { FormEvent, SyntheticEvent, useEffect, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -10,11 +10,16 @@ export default function EditProfile() {
 	const [lastName, setLastName] = useState('')
 	const [gender, setGender] = useState('')
 	const [biography, setBiography] = useState('')
+	const [sexualPreferences, SetSexualPreferences] = useState<string[] | null>([])
+	const [tags, SetTags] = useState<string[] | null>([])
 	const [loading, setLoading] = useState(false)
 
 	const [genderOptions, setGenderOptions] = useState<string[]>([])
+	const [sexualPreferencesOptions, setSexualPreferencesOptions] = useState<string[]>([])
+	const [tagsOptions, setTagsOptions] = useState<string[]>([])
 	const [profileSrc, setpProfileSrc] = useState("")
 	const [picturesSrc, setPicturesSrc] = useState<string[]>([])
+
 
 	const profile = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 	const pictureSrc1 = "https://images.unsplash.com/photo-1476254592636-2a8e23b256fe?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -22,9 +27,9 @@ export default function EditProfile() {
 	const pictureSrc3 = "https://images.unsplash.com/photo-1525715843408-5c6ec44503b1?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 	const pictureSrc4 = "https://images.unsplash.com/photo-1478144113946-d55adda4e24e?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
+	const maximumNumberOfOptions = 2
 
-
-	const formData = {
+	let formData = {
 		"id": 123,
 		"user_id": 123,
 		"first_name": "any",
@@ -45,6 +50,7 @@ export default function EditProfile() {
 			"any1",
 			"any2"
 		],
+		"profile_picture": "profileSrc"
 		// "view_counter": 2,
 		// "is_online": true,
 		// "last_online_at": "2024-11-11T23:59:59Z",
@@ -54,8 +60,36 @@ export default function EditProfile() {
 
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault()
-		console.log("teste", formData)
 		setLoading(true)
+		formData = {
+			"id": 123,
+			"user_id": 123,
+			"first_name": firstName,
+			"last_name": lastName,
+			// "location": "any" To DO,
+			// "likes_counter": 2,
+			gender,
+			"tags_list": tags ? tags : [""],
+			biography,
+			"sexual_preference": sexualPreferences ? sexualPreferences : [""],
+			"pictures": picturesSrc,
+			"profile_picture": profileSrc
+			// "view_counter": 2,
+			// "is_online": true,
+			// "last_online_at": "2024-11-11T23:59:59Z",
+			// "account_status": "active"
+		}
+		console.log("teste", formData)
+		setLoading(false)
+	}
+
+	function handleSexualPrefereceChange(_event: SyntheticEvent<Element, Event>, newValue: string[] | null) {
+		SetSexualPreferences(newValue)
+	}
+	function handleTagsChange(_event: SyntheticEvent<Element, Event>, newValue: string[] | null) {
+		if (tags && tags?.length < maximumNumberOfOptions || newValue && newValue.length < maximumNumberOfOptions) {
+			SetTags(newValue)
+		}
 	}
 
 	useEffect(() => {
@@ -64,6 +98,8 @@ export default function EditProfile() {
 			pictureSrc1, pictureSrc2, pictureSrc3, pictureSrc4
 		])
 		setpProfileSrc(profile)
+		setSexualPreferencesOptions(["asexual", "bisexual", "gay", "lesbian", "straight"])
+		setTagsOptions(["vegan", "geek", "piercing"])
 	}, [])
 
 
@@ -94,7 +130,6 @@ export default function EditProfile() {
 												</Box>
 											</Paper>
 										</Grid2>
-
 										{
 											picturesSrc?.map((src: string, index) => (
 												<Grid2 key={index} size={{ xs: 5, md: 1 }} display={"flex"} justifyContent={"center"}>
@@ -110,7 +145,6 @@ export default function EditProfile() {
 												</Grid2>
 											))
 										}
-
 									</Grid2>
 								</Grid2>
 								<Grid2 container spacing={2} >
@@ -130,6 +164,44 @@ export default function EditProfile() {
 												))
 											}
 										</TextField>
+									</Grid2>
+									<Grid2 size={{ xs: 12, md: 6 }}>
+										<Autocomplete
+											disablePortal
+											multiple
+											options={sexualPreferencesOptions}
+											renderInput={(params) => (
+												<TextField label="Sexual Preference" {...params} />
+											)}
+											renderTags={(tagValue, getTagProps) =>
+												tagValue.map((option, index) => {
+													const { key, ...tagProps } = getTagProps({ index });
+													return <Chip key={key} variant="outlined" color="primary" label={option} {...tagProps} />;
+												})
+											}
+											value={sexualPreferences ? sexualPreferences : [""]}
+											onChange={handleSexualPrefereceChange}
+										/>
+									</Grid2>
+									<Grid2 size={{ xs: 12, md: 6 }}>
+										<Autocomplete
+											disablePortal
+											multiple
+											options={tagsOptions}
+											renderInput={(params) => (
+												<TextField label="Interests" helperText={
+													tags && tags.length >= 2 ? `You can select a maximum of ${maximumNumberOfOptions} options.` : ""
+												} {...params} />
+											)}
+											renderTags={(tagValue, getTagProps) =>
+												tagValue.map((option, index) => {
+													const { key, ...tagProps } = getTagProps({ index });
+													return <Chip key={key} variant="outlined" color="primary" label={option} {...tagProps} />;
+												})
+											}
+											value={tags ? tags : [""]}
+											onChange={handleTagsChange}
+										/>
 									</Grid2>
 									<Grid2 size={{ xs: 12 }}>
 										<TextField fullWidth required multiline
