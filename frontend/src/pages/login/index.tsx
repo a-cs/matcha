@@ -85,7 +85,7 @@ export default function Login() {
 									<Grid2 size={{ xs: 12 }}>
 										<Stack spacing={2} direction={"row"} justifyContent={"space-between"}>
 											<Button type="button" variant="outlined" startIcon={<PersonAddIcon />} sx={{ borderWidth: "3px", borderRadius: '32px' }} href="/signup"><b>SignUp</b></Button>
-											<Button type="button" variant="outlined" startIcon={<LockResetIcon />} sx={{ borderWidth: "3px", borderRadius: '32px' }} href="/signup"><b>Password</b></Button>
+											<Button type="button" variant="outlined" startIcon={<LockResetIcon />} sx={{ borderWidth: "3px", borderRadius: '32px' }} href="/forgottenPassword"><b>Password</b></Button>
 											<Button type="submit" variant="contained" startIcon={!loading ? <LoginIcon /> : ""} sx={{ borderRadius: '32px' }}>{!loading ? <b>Login</b> : <CircularProgress color="inherit" size={21} sx={{ my: "1.75px", mx: "29.82px" }} />}</Button>
 										</Stack>
 									</Grid2>
