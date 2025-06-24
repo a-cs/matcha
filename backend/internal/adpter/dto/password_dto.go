@@ -16,5 +16,5 @@ func (r RecoverRequestDto) IsValid() bool {
 }
 
 func (c ChangePasswordDto) IsValid() bool {
-	return len(c.Token) > 0 && len(c.NewPassword) > 0 && !utils.IsSQLInjection(c.NewPassword, c.Token)
+	return len(c.Token) > 0 && utils.IsValidPassword(c.NewPassword) && !utils.IsSQLInjection(c.NewPassword, c.Token)
 }

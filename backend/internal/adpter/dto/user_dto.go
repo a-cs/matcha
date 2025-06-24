@@ -25,7 +25,7 @@ func (c CreateUserDto) IsValid() bool {
 	return !utils.IsSQLInjection(c.Email, c.Username, c.Password, c.FirstName, c.LastName) &&
 		utils.IsValidEmail(c.Email) &&
 		len(c.Username) > 0 &&
-		len(c.Password) > 0 &&
+		utils.IsValidPassword(c.Password) &&
 		len(c.FirstName) > 0 &&
 		len(c.LastName) > 0
 }
